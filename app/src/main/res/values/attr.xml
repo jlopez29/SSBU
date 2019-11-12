@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SwipeView">
+        <attr name="LeftRippleColor" format="color"/>
+        <attr name="RightRippleColor" format="color"/>
+    </declare-styleable>
+</resources>

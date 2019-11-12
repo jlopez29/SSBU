@@ -15,12 +15,12 @@ import com.jlapps.ssbu.View.Adapter.DefaultRecyclerAdapter
 import com.jlapps.ssbu.Model.*
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_character.view.*
-import me.thanel.swipeactionview.SwipeActionView
-import me.thanel.swipeactionview.SwipeGestureListener
 import kotlinx.android.synthetic.main.fragment_character_selection.*
 
 import com.jlapps.ssbu.R
-
+import com.jlapps.ssbu.Util.SwipeView.SwipeAnimator
+import com.jlapps.ssbu.Util.SwipeView.SwipeListener
+import com.jlapps.ssbu.Util.SwipeView.SwipeView
 
 
 class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapterListener<Character>{
@@ -43,8 +43,8 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
         rv_characters.layoutManager = LinearLayoutManager(context)
         rv_characters.adapter = DefaultRecyclerAdapter(characters,
             R.layout.item_character,this)
-    }
 
+    }
 
     override fun bindItemToView(item: Character, position: Int, viewHolder: RecyclerView.ViewHolder) {
 
@@ -73,8 +73,25 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
         else
             viewHolder.itemView.iv_character_fav_ic.visibility = View.INVISIBLE
 
-        viewHolder.itemView.sv_layout.swipeGestureListener = object : SwipeGestureListener {
-            override fun onSwipedLeft(swipeActionView: SwipeActionView): Boolean {
+        viewHolder.itemView.sv_layout.rightSwipeAnimator = object : SwipeAnimator{
+            override fun onUpdateSwipeProgress(
+                view: View,
+                progress: Float,
+                minActivationProgress: Float
+            ) {
+            }
+
+            override fun onActivate() {
+                Log.e(TAG,"Activate")
+                if(viewHolder.itemView.cv_character.strokeColor == resources.getColor(R.color.blue_text,null)) {
+                    Log.e(TAG,"Remove border")
+                    removeBorder(position)
+                }
+            }
+        }
+
+        viewHolder.itemView.sv_layout.swipeGestureListener = object : SwipeListener {
+            override fun onSwipedLeft(swipeActionView: SwipeView): Boolean {
                 Log.e(TAG,"swiped $position")
 
                 if(viewHolder.itemView.iv_character_fav_ic.visibility == View.VISIBLE) {
@@ -114,7 +131,7 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
                 return true
             }
 
-            override fun onSwipedRight(swipeActionView: SwipeActionView): Boolean {
+            override fun onSwipedRight(swipeActionView: SwipeView): Boolean {
 //                Log.e(TAG,"swiped $position")
 
 
@@ -140,8 +157,10 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
                         setSelection(viewHolder,item,position,true)
                 }
 
+                viewHolder.itemView.sv_layout.animateToOriginalPosition(0)
 
-                return true
+
+                return false
             }
         }
 
@@ -154,14 +173,15 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
             .load(item.image).resize(800,0).centerInside()
             .into(viewHolder.itemView.iv_character)
         viewHolder.itemView.iv_character_mark.setImageResource(item.mark)
+
     }
 
     fun setSelection(viewHolder: RecyclerView.ViewHolder, item: Character, position: Int, selected:Boolean){
         if(selected){
             if(CharacterComparison.selectingChar1) {
                 CharacterComparison.char1.isSelected = false
-                if (CharacterComparison.char1.id != -1)
-                    removeBorder(CharacterComparison.char1.id)
+//                if (CharacterComparison.char1.id != -1)
+//                    removeBorder(CharacterComparison.char1.id)
 
                 CharacterComparison.char1 = characters.get(position)
                 item.isSelected = true
@@ -178,8 +198,8 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
             else
             {
                 CharacterComparison.char2.isSelected = false
-                if(CharacterComparison.char2.id != -1)
-                    removeBorder(CharacterComparison.char2.id)
+//                if(CharacterComparison.char2.id != -1)
+//                    removeBorder(CharacterComparison.char2.id)
                 CharacterComparison.char2 = characters.get(position)
                 CharacterComparison.selectingChar1 = true
                 item.isSelected = true
@@ -195,7 +215,7 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
             if (CharacterComparison.selectingChar1) {
 
                 activity?.actionBar?.subtitle = ""
-                removeBorder(CharacterComparison.char1.id)
+//                removeBorder(CharacterComparison.char1.id)
                 CharacterComparison.char1 = Character()
                 item.isSelected = false
                 changeSelectionBackground(viewHolder, false)
@@ -204,7 +224,7 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
             else {
 
                 activity?.actionBar?.subtitle = ""
-                removeBorder(CharacterComparison.char2.id)
+//                removeBorder(CharacterComparison.char2.id)
                 CharacterComparison.char2 = Character()
                 item.isSelected = false
                 changeSelectionBackground(viewHolder, false)
@@ -323,11 +343,7 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
     }
 
     fun removeBorder(pos:Int){
-        val r = Runnable {
-            rv_characters.adapter?.notifyItemChanged(pos)
-
-        }
-        Handler().postDelayed(r, animationDuration)
+        rv_characters.adapter?.notifyItemChanged(pos)
     }
 
     fun changeSelectionBackground(viewHolder: RecyclerView.ViewHolder,selected:Boolean){
@@ -343,5 +359,8 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
         }
         Handler().postDelayed(r, animationDuration)
     }
+
+
+
 }
 

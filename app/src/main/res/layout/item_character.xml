@@ -13,7 +13,7 @@
     android:clipToPadding="false"
     android:clipChildren="false">
 
-    <me.thanel.swipeactionview.SwipeActionView
+    <com.jlapps.ssbu.Util.SwipeView.SwipeView
         android:id="@+id/sv_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -135,7 +135,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </me.thanel.swipeactionview.SwipeActionView>
+    </com.jlapps.ssbu.Util.SwipeView.SwipeView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

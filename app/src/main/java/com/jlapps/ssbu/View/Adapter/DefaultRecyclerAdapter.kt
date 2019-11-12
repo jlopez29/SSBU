@@ -28,7 +28,7 @@ class DefaultRecyclerAdapter<Any>(
 
         init {
             val holder = this
-            container.setOnClickListener { v ->
+            container.setOnClickListener {
                 listener.recyclerItemClicked(
                     item,
                     adapterPosition,
