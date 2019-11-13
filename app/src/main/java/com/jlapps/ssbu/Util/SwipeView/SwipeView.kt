@@ -20,9 +20,12 @@ import android.view.ViewConfiguration
 import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
 import androidx.annotation.ColorInt
+import androidx.recyclerview.widget.RecyclerView
+import com.jlapps.ssbu.Model.Character
 import com.jlapps.ssbu.R
 
 class SwipeView : FrameLayout {
+
     val TAG = "SV"
     /**
      * Distance from edges in pixels that prevents starting of drag movement.
@@ -98,7 +101,7 @@ class SwipeView : FrameLayout {
     /**
      * The container translation animator.
      */
-    private val animator by lazy {
+    val animator by lazy {
         ObjectAnimator.ofFloat(container, View.TRANSLATION_X, 0f).apply {
             interpolator = DecelerateInterpolator()
             addUpdateListener { performViewAnimations() }
@@ -424,19 +427,6 @@ class SwipeView : FrameLayout {
         animateToOriginalPosition(startDelay)
     }
 
-    /**
-     * Animate the view to its original position.
-     *
-     * @param startDelay The amount of delay, in milliseconds, to wait before starting the
-     * movement animation. (Defaults to 0)
-     */
-    @JvmOverloads
-    fun finishAnimation(startDelay: Long = 0) {
-        animateContainer(0f, swipeAnimationDuration, startDelay) {
-            canPerformSwipeAction = true
-            rightSwipeAnimator?.onActivate()
-        }
-    }
     /**
      * Animate the view to its original position.
      *
@@ -799,10 +789,11 @@ class SwipeView : FrameLayout {
      * @param swipedRight Tells whether the view was swiped to the right instead of left side.
      */
     private fun activate(swipedRight: Boolean) {
-        Log.e(TAG,"activate")
+//        Log.e(TAG,"activate")
         // If activation animation didn't finish, move the view to original position without
         // executing activate callback.
         if (!canPerformSwipeAction) {
+            Log.e(TAG,"cant swipe")
             animateToOriginalPosition()
             return
         }
@@ -816,15 +807,14 @@ class SwipeView : FrameLayout {
 
         val targetTranslationX = if (swipedRight) maxRightSwipeDistance else -maxLeftSwipeDistance
         animateContainer(targetTranslationX, swipeAnimationDuration) {
-            val shouldFinish = if (swipedRight) {
+            val shouldFinish = if (swipedRight)
                 swipeGestureListener?.onSwipedRight(this)
-            } else {
+             else {
                 swipeGestureListener?.onSwipedLeft(this)
             }
 
             if (shouldFinish != false) {
-                Log.e(TAG,"finish anim")
-                finishAnimation(200)
+                animateToOriginalPosition(200)
             }
         }
     }

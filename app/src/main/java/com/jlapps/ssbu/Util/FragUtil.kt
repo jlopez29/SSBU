@@ -1,10 +1,10 @@
 package com.jlapps.ssbu.Util
 
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.jlapps.ssbu.R
-import com.jlapps.ssbu.View.CharacterSelection
+import com.jlapps.ssbu.View.Fragment.CharacterSelection
+import com.jlapps.ssbu.View.Fragment.CharacterStats
 
 object FragUtil {
 
@@ -14,7 +14,15 @@ object FragUtil {
             "CharSelect" -> showFragment(
                 act,
                 CharacterSelection(),
-                "Login",
+                "CharSelect",
+                backStack,
+                R.anim.slide_in_right,
+                R.anim.slide_out_left
+            )
+            "CharStats" -> showFragment(
+                act,
+                CharacterStats(),
+                "CharStats",
                 backStack,
                 R.anim.slide_in_right,
                 R.anim.slide_out_left

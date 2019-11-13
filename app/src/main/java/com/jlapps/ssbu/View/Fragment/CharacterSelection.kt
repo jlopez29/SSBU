@@ -1,4 +1,4 @@
-package com.jlapps.ssbu.View
+package com.jlapps.ssbu.View.Fragment
 
 import android.os.Bundle
 import android.os.Handler
@@ -18,7 +18,6 @@ import kotlinx.android.synthetic.main.item_character.view.*
 import kotlinx.android.synthetic.main.fragment_character_selection.*
 
 import com.jlapps.ssbu.R
-import com.jlapps.ssbu.Util.SwipeView.SwipeAnimator
 import com.jlapps.ssbu.Util.SwipeView.SwipeListener
 import com.jlapps.ssbu.Util.SwipeView.SwipeView
 
@@ -73,58 +72,18 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
         else
             viewHolder.itemView.iv_character_fav_ic.visibility = View.INVISIBLE
 
-        viewHolder.itemView.sv_layout.rightSwipeAnimator = object : SwipeAnimator{
-            override fun onUpdateSwipeProgress(
-                view: View,
-                progress: Float,
-                minActivationProgress: Float
-            ) {
-            }
-
-            override fun onActivate() {
-                Log.e(TAG,"Activate")
-                if(viewHolder.itemView.cv_character.strokeColor == resources.getColor(R.color.blue_text,null)) {
-                    Log.e(TAG,"Remove border")
-                    removeBorder(position)
-                }
-            }
-        }
-
         viewHolder.itemView.sv_layout.swipeGestureListener = object : SwipeListener {
             override fun onSwipedLeft(swipeActionView: SwipeView): Boolean {
-                Log.e(TAG,"swiped $position")
+//                Log.e(TAG,"swiped $position")
 
                 if(viewHolder.itemView.iv_character_fav_ic.visibility == View.VISIBLE) {
-                    val animation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
-                    animation.setAnimationListener(object : Animation.AnimationListener{
-                        override fun onAnimationRepeat(animation: Animation?) {
-                        }
 
-                        override fun onAnimationEnd(animation: Animation?) {
-                            viewHolder.itemView.iv_character_fav_ic.visibility = View.GONE
-                        }
-
-                        override fun onAnimationStart(animation: Animation?) {
-                        }
-                    })
-                    viewHolder.itemView.iv_character_fav_ic.startAnimation(animation)
+                    fadeView(false,viewHolder.itemView.iv_character_fav_ic)
 
                     item.isFavorite = false
                 }
                 else {
-                    val animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
-                    animation.setAnimationListener(object : Animation.AnimationListener{
-                        override fun onAnimationRepeat(animation: Animation?) {
-                        }
-
-                        override fun onAnimationEnd(animation: Animation?) {
-                            viewHolder.itemView.iv_character_fav_ic.visibility = View.VISIBLE
-                        }
-
-                        override fun onAnimationStart(animation: Animation?) {
-                        }
-                    })
-                    viewHolder.itemView.iv_character_fav_ic.startAnimation(animation)
+                    fadeView(true,viewHolder.itemView.iv_character_fav_ic)
                     item.isFavorite = true
                 }
 
@@ -175,68 +134,9 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
         viewHolder.itemView.iv_character_mark.setImageResource(item.mark)
 
     }
-
-    fun setSelection(viewHolder: RecyclerView.ViewHolder, item: Character, position: Int, selected:Boolean){
-        if(selected){
-            if(CharacterComparison.selectingChar1) {
-                CharacterComparison.char1.isSelected = false
-//                if (CharacterComparison.char1.id != -1)
-//                    removeBorder(CharacterComparison.char1.id)
-
-                CharacterComparison.char1 = characters.get(position)
-                item.isSelected = true
-
-                viewHolder.itemView.cv_character.strokeColor =
-                    resources.getColor(R.color.blue_text,null)
-
-                CharacterComparison.selectingChar1 = false
-                changeSelectionBackground(viewHolder, true)
-                if(CharacterComparison.char2.id != -1)
-                    activity?.actionBar?.subtitle =  "${CharacterComparison.char1.name} v ${CharacterComparison.char2.name}"
-                
-            }
-            else
-            {
-                CharacterComparison.char2.isSelected = false
-//                if(CharacterComparison.char2.id != -1)
-//                    removeBorder(CharacterComparison.char2.id)
-                CharacterComparison.char2 = characters.get(position)
-                CharacterComparison.selectingChar1 = true
-                item.isSelected = true
-                viewHolder.itemView.cv_character.strokeColor =
-                    resources.getColor(R.color.blue_text,null)
-                changeSelectionBackground(viewHolder,true)
-                if(CharacterComparison.char1.id != -1)
-                    activity?.actionBar?.subtitle =  "${CharacterComparison.char1.name} v ${CharacterComparison.char2.name}"
-
-            }
-
-        }else {
-            if (CharacterComparison.selectingChar1) {
-
-                activity?.actionBar?.subtitle = ""
-//                removeBorder(CharacterComparison.char1.id)
-                CharacterComparison.char1 = Character()
-                item.isSelected = false
-                changeSelectionBackground(viewHolder, false)
-                CharacterComparison.selectingChar1 = true
-            }
-            else {
-
-                activity?.actionBar?.subtitle = ""
-//                removeBorder(CharacterComparison.char2.id)
-                CharacterComparison.char2 = Character()
-                item.isSelected = false
-                changeSelectionBackground(viewHolder, false)
-                CharacterComparison.selectingChar1 = false
-            }
-        }
-    }
-
     override fun recyclerItemClicked(item: Character?, position: Int, viewHolder: RecyclerView.ViewHolder) {
         Log.e(TAG,"clicked $position")
     }
-
     fun initChars():ArrayList<Character>{
         val list = ArrayList<Character>()
         list.add(
@@ -342,8 +242,101 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
         return list
     }
 
+    fun fadeView(fadeIn:Boolean,view:View){
+        lateinit var animation: Animation
+
+        if(fadeIn) {
+            animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
+            animation.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationRepeat(animation: Animation?) {
+                }
+
+                override fun onAnimationEnd(animation: Animation?) {
+                    view.visibility = View.VISIBLE
+                }
+
+                override fun onAnimationStart(animation: Animation?) {
+                }
+            })
+        }else
+        {
+            animation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
+            animation.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationRepeat(animation: Animation?) {
+                }
+
+                override fun onAnimationEnd(animation: Animation?) {
+                    view.visibility = View.GONE
+                }
+
+                override fun onAnimationStart(animation: Animation?) {
+                }
+            })
+        }
+        view.startAnimation(animation)
+    }
+
+    fun setSelection(viewHolder: RecyclerView.ViewHolder, item: Character, position: Int, selected:Boolean){
+        if(selected){
+            if(CharacterComparison.selectingChar1) {
+                CharacterComparison.char1.isSelected = false
+                if (CharacterComparison.char1.id != -1)
+                    removeBorder(CharacterComparison.char1.id)
+
+                CharacterComparison.char1 = characters.get(position)
+                item.isSelected = true
+
+                viewHolder.itemView.cv_character.strokeColor =
+                    resources.getColor(R.color.blue_text,null)
+
+                CharacterComparison.selectingChar1 = false
+                changeSelectionBackground(viewHolder, true)
+                if(CharacterComparison.char2.id != -1)
+                    activity?.actionBar?.subtitle =  "${CharacterComparison.char1.name} v ${CharacterComparison.char2.name}"
+                
+            }
+            else
+            {
+                CharacterComparison.char2.isSelected = false
+                if(CharacterComparison.char2.id != -1)
+                    removeBorder(CharacterComparison.char2.id)
+                CharacterComparison.char2 = characters.get(position)
+                CharacterComparison.selectingChar1 = true
+                item.isSelected = true
+                viewHolder.itemView.cv_character.strokeColor =
+                    resources.getColor(R.color.blue_text,null)
+                changeSelectionBackground(viewHolder,true)
+                if(CharacterComparison.char1.id != -1)
+                    activity?.actionBar?.subtitle =  "${CharacterComparison.char1.name} v ${CharacterComparison.char2.name}"
+
+            }
+
+        }else {
+            if (CharacterComparison.selectingChar1) {
+
+                activity?.actionBar?.subtitle = ""
+                removeBorder(CharacterComparison.char1.id)
+                CharacterComparison.char1 = Character()
+                item.isSelected = false
+                changeSelectionBackground(viewHolder, false)
+                CharacterComparison.selectingChar1 = true
+            }
+            else {
+
+                activity?.actionBar?.subtitle = ""
+                removeBorder(CharacterComparison.char2.id)
+                CharacterComparison.char2 = Character()
+                item.isSelected = false
+                changeSelectionBackground(viewHolder, false)
+                CharacterComparison.selectingChar1 = false
+            }
+        }
+    }
+
     fun removeBorder(pos:Int){
-        rv_characters.adapter?.notifyItemChanged(pos)
+
+        var view = rv_characters.layoutManager?.findViewByPosition(pos)
+        view?.sv_layout?.cv_character?.strokeColor = resources.getColor(android.R.color.transparent,null)
     }
 
     fun changeSelectionBackground(viewHolder: RecyclerView.ViewHolder,selected:Boolean){

@@ -11,7 +11,7 @@ class MainActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        FragUtil.swapFragment(this,"CharSelect",false)
+        FragUtil.swapFragment(this,"CharStats",false)
     }
 
 }
