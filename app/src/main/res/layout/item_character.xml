@@ -17,6 +17,7 @@
         android:id="@+id/sv_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:foreground="?selectableItemBackground"
         android:clipChildren="false"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -92,7 +93,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="E Tier"
-                        style="@style/text_fighter_blue"/>
+                        style="@style/text_tier_blue"/>
                     <TextView
                         android:id="@+id/tv_character_name"
                         android:layout_width="wrap_content"

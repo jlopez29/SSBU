@@ -9,14 +9,14 @@
     android:paddingEnd="@dimen/default_margin"
     android:paddingTop="@dimen/large_margin"
     android:paddingBottom="@dimen/default_margin"
+    android:foreground="?selectableItemBackground"
     android:clipToPadding="false"
     android:clipChildren="false">
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cv_character"
+        android:id="@+id/cv_character_stat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
 

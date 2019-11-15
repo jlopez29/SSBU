@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jlapps.ssbu.View.Adapter.DefaultRecyclerAdapter
@@ -18,6 +19,7 @@ import kotlinx.android.synthetic.main.item_character.view.*
 import kotlinx.android.synthetic.main.fragment_character_selection.*
 
 import com.jlapps.ssbu.R
+import com.jlapps.ssbu.Util.FragUtil
 import com.jlapps.ssbu.Util.SwipeView.SwipeListener
 import com.jlapps.ssbu.Util.SwipeView.SwipeView
 
@@ -37,7 +39,9 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
 
         characters = initChars()
 
-        activity?.actionBar?.title = "Fighters"
+
+        (activity as AppCompatActivity).setSupportActionBar(tb_char_selection)
+
 
         rv_characters.layoutManager = LinearLayoutManager(context)
         rv_characters.adapter = DefaultRecyclerAdapter(characters,
@@ -125,6 +129,9 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
 
         viewHolder.itemView.sv_layout.setOnClickListener {
             Log.e(TAG,"clicked $position")
+            var args = Bundle()
+            args.putSerializable("char",item)
+            FragUtil.swapFragment(activity as AppCompatActivity,FragUtil.fragmentCharacterStats,true,args)
         }
 
         Picasso
@@ -136,7 +143,11 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
     }
     override fun recyclerItemClicked(item: Character?, position: Int, viewHolder: RecyclerView.ViewHolder) {
         Log.e(TAG,"clicked $position")
+        var args = Bundle()
+        args.putSerializable("char",item)
+        FragUtil.swapFragment(activity as AppCompatActivity,FragUtil.fragmentCharacterStats,true,args)
     }
+
     fun initChars():ArrayList<Character>{
         val list = ArrayList<Character>()
         list.add(
@@ -146,7 +157,8 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
                 "animal_crossing",
                 'E',
                 R.drawable.img_villager,
-                R.drawable.doubutsu
+                R.drawable.doubutsu,
+                CharacterAttributes(60,40,80,20,80,40,20,40)
             )
         )
         list.add(
@@ -156,7 +168,8 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
                 "animal_crossing",
                 'E',
                 R.drawable.img_terry,
-                R.drawable.garou
+                R.drawable.garou,
+                CharacterAttributes(60,40,80,20,80,40,20,40)
             )
         )
         list.add(
@@ -166,7 +179,8 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
                 "animal_crossing",
                 'E',
                 R.drawable.img_toon_link,
-                R.drawable.zelda
+                R.drawable.zelda,
+                CharacterAttributes(60,40,80,20,80,40,20,40)
             )
         )
         list.add(
@@ -176,7 +190,8 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
                 "animal_crossing",
                 'E',
                 R.drawable.img_wario,
-                R.drawable.wario
+                R.drawable.wario,
+                CharacterAttributes(60,40,80,20,80,40,20,40)
             )
         )
         list.add(
@@ -186,7 +201,8 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
                 "animal_crossing",
                 'E',
                 R.drawable.img_wii_fit_trainer,
-                R.drawable.wii_fit
+                R.drawable.wii_fit,
+                CharacterAttributes(60,40,80,20,80,40,20,40)
             )
         )
         list.add(
@@ -196,7 +212,8 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
                 "animal_crossing",
                 'E',
                 R.drawable.img_wolf,
-                R.drawable.starfox
+                R.drawable.starfox,
+                CharacterAttributes(60,40,80,20,80,40,20,40)
             )
         )
         list.add(
@@ -206,7 +223,8 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
                 "animal_crossing",
                 'E',
                 R.drawable.img_yoshi,
-                R.drawable.yoshi
+                R.drawable.yoshi,
+                CharacterAttributes(60,40,80,20,80,40,20,40)
             )
         )
         list.add(
@@ -216,7 +234,8 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
                 "animal_crossing",
                 'E',
                 R.drawable.img_young_link,
-                R.drawable.zelda
+                R.drawable.zelda,
+                CharacterAttributes(60,40,80,20,80,40,20,40)
             )
         )
         list.add(
@@ -226,7 +245,8 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
                 "animal_crossing",
                 'E',
                 R.drawable.img_zelda,
-                R.drawable.zelda
+                R.drawable.zelda,
+                CharacterAttributes(60,40,80,20,80,40,20,40)
             )
         )
         list.add(
@@ -236,7 +256,8 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
                 "animal_crossing",
                 'E',
                 R.drawable.img_zero_suit_samus,
-                R.drawable.metroid
+                R.drawable.metroid,
+                CharacterAttributes(60,40,80,20,80,40,20,40)
             )
         )
         return list

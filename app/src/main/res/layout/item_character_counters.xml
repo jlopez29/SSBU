@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cl_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="@dimen/default_margin"
+    android:paddingEnd="@dimen/default_margin"
+    android:background="@android:color/transparent"
+    android:paddingTop="@dimen/large_margin"
+    android:paddingBottom="@dimen/default_margin"
+    android:clipToPadding="false"
+    android:clipChildren="false">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cv_character"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?selectableItemBackground"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+
+        app:strokeWidth="2dp"
+        app:cardBackgroundColor="@color/blue_mark_bg"
+        app:cardElevation="2dp"
+        app:cardCornerRadius="10dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:clipChildren="false">
+
+            <ImageView
+                android:id="@+id/iv_character_mark"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_doubutsu"
+                android:layout_marginEnd="@dimen/default_margin"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="@dimen/default_margin"
+                android:alpha=".75"/>
+
+            <LinearLayout
+                android:id="@+id/ll_character_name_tier"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/default_margin"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/iv_character_counter_image"
+                android:layout_marginTop="@dimen/default_margin"
+                app:layout_constraintVertical_chainStyle="spread_inside"
+                app:layout_constraintVertical_weight=".25"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tv_character_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Villager"
+                    style="@style/text_fighter_white"/>
+                <TextView
+                    android:id="@+id/tv_character_tier"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="E Tier"
+                    style="@style/text_tier_grey"/>
+            </LinearLayout>
+
+
+            <ImageView
+                android:id="@+id/iv_character_counter_image"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+
+                android:src="@drawable/img_villager"
+                android:elevation="2dp"
+                android:outlineProvider="none"
+                app:layout_constraintVertical_weight=".75"
+                app:layout_constraintTop_toBottomOf="@id/ll_character_name_tier"
+                app:layout_constraintStart_toStartOf="@id/ll_character_name_tier"
+                app:layout_constraintEnd_toEndOf="@id/ll_character_name_tier"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <LinearLayout
+                android:id="@+id/ll_character_counter_stats"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_margin"
+                android:layout_marginEnd="@dimen/default_margin"
+                android:layout_marginBottom="@dimen/default_margin"
+                app:layout_constraintTop_toTopOf="@id/iv_character_counter_image"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/ll_character_name_tier"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tv_character_counter_weight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Weight"
+                    android:textColor="@color/white"/>
+                <ProgressBar
+                    android:id="@+id/pb_character_counter_weight_progress"
+                    xmlns:tools="http://schemas.android.com/tools"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:layout_marginTop="@dimen/tiny_margin"
+                    android:layout_marginBottom="@dimen/small_margin"
+                    android:progressDrawable="@drawable/pb_counter_stats"
+                    tools:progress="60"
+                />
+                <TextView
+                    android:id="@+id/tv_character_counter_damage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Damage"
+                    android:textColor="@color/white"/>
+                <ProgressBar
+                    android:id="@+id/pb_character_counter_damage_progress"
+                    xmlns:tools="http://schemas.android.com/tools"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:layout_marginTop="@dimen/tiny_margin"
+                    android:layout_marginBottom="@dimen/small_margin"
+                    android:progressDrawable="@drawable/pb_counter_stats"
+                    tools:progress="60"
+                    />
+                <TextView
+                    android:id="@+id/tv_character_counter_defense"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Defense"
+                    android:textColor="@color/white"/>
+                <ProgressBar
+                    android:id="@+id/pb_character_counter_defense_progress"
+                    xmlns:tools="http://schemas.android.com/tools"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:layout_marginTop="@dimen/tiny_margin"
+                    android:layout_marginBottom="@dimen/small_margin"
+                    android:progressDrawable="@drawable/pb_counter_stats"
+                    tools:progress="60"
+                    />
+                <TextView
+                    android:id="@+id/tv_character_counter_speed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Speed"
+                    android:textColor="@color/white"/>
+                <ProgressBar
+                    android:id="@+id/pb_character_counter_speed_progress"
+                    xmlns:tools="http://schemas.android.com/tools"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:layout_marginTop="@dimen/tiny_margin"
+                    android:layout_marginBottom="@dimen/small_margin"
+                    android:progressDrawable="@drawable/pb_counter_stats"
+                    tools:progress="60"
+                    />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

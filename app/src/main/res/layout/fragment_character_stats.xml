@@ -28,9 +28,9 @@
                 android:fitsSystemWindows="true"
                 app:title="Villager"
                 app:expandedTitleGravity="center|top"
-                app:expandedTitleTextAppearance="@style/expanded"
+                app:expandedTitleTextAppearance="@style/collapsing_tb_expanded"
                 app:collapsedTitleGravity="center"
-                app:collapsedTitleTextAppearance="@style/collapsed"
+                app:collapsedTitleTextAppearance="@style/collapsing_tb_collapsed"
                 app:contentScrim="?attr/colorPrimary"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 app:scrimVisibleHeightTrigger="200dp"
@@ -63,22 +63,28 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
             <LinearLayout
                 android:id="@+id/ll_character_stats_overview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_margin"
+                android:layout_marginEnd="@dimen/default_margin"
+                android:paddingTop="@dimen/tiny_margin"
+                android:paddingBottom="@dimen/tiny_margin"
                 app:layout_constraintTop_toTopOf="parent"
-                android:padding="@dimen/default_margin"
                 app:layout_constraintStart_toStartOf="parent">
                 <ImageView
                     android:id="@+id/iv_overview_pill"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/bg_stats_pill"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/ic_minus_to_plus"
                     android:layout_gravity="center_vertical"
                     />
 
@@ -94,102 +100,113 @@
                     />
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/ll_character_tags"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_character_stat_overview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="@dimen/default_margin"
-                android:layout_marginTop="@dimen/medium_margin"
                 app:layout_constraintTop_toBottomOf="@id/ll_character_stats_overview">
-
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cv_character_series"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/ll_character_tags"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/blue_dark2"
-                    app:contentPaddingTop="@dimen/small_margin"
-                    app:contentPaddingBottom="@dimen/small_margin"
-                    app:contentPaddingRight="@dimen/default_margin"
-                    app:contentPaddingLeft="@dimen/default_margin"
-                    app:cardElevation="0dp"
-                    app:cardCornerRadius="5dp">
+                    android:orientation="horizontal"
+                    android:layout_marginStart="@dimen/default_margin"
+                    android:layout_marginEnd="@dimen/default_margin"
+                    android:paddingTop="@dimen/tiny_margin"
+                    android:paddingBottom="@dimen/tiny_margin"
+                    android:layout_marginTop="@dimen/default_margin"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                    <RelativeLayout
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cv_character_series"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/blue_dark2"
+                        app:contentPaddingTop="@dimen/small_margin"
+                        app:contentPaddingBottom="@dimen/small_margin"
+                        app:contentPaddingRight="@dimen/default_margin"
+                        app:contentPaddingLeft="@dimen/default_margin"
+                        app:cardElevation="0dp"
+                        app:cardCornerRadius="5dp">
 
-                        <ImageView
-                            android:id="@+id/iv_character_series_icon"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_doubutsu"
-                            android:layout_alignTop="@id/tv_series_name"
-                            android:layout_alignBottom="@id/tv_series_name"/>
-
-                        <TextView
-                            android:id="@+id/tv_series_name"
+                        <RelativeLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Animal Crossing"
-                            android:textColor="@color/white"
-                            android:fontFamily="@font/roboto_medium"
-                            android:layout_toEndOf="@id/iv_character_series_icon"/>
-                    </RelativeLayout>
-                </com.google.android.material.card.MaterialCardView>
+                            android:layout_height="wrap_content">
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cv_character_tier"
-                    android:layout_width="wrap_content"
+                            <ImageView
+                                android:id="@+id/iv_character_series_icon"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_doubutsu"
+                                android:layout_alignTop="@id/tv_series_name"
+                                android:layout_alignBottom="@id/tv_series_name"/>
+
+                            <TextView
+                                android:id="@+id/tv_series_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Animal Crossing"
+                                android:textColor="@color/white"
+                                android:fontFamily="@font/roboto_medium"
+                                android:layout_toEndOf="@id/iv_character_series_icon"/>
+                        </RelativeLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cv_character_tier"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/blue_dark2"
+                        app:contentPaddingTop="@dimen/small_margin"
+                        app:contentPaddingBottom="@dimen/small_margin"
+                        app:contentPaddingRight="@dimen/default_margin"
+                        app:contentPaddingLeft="@dimen/default_margin"
+                        app:cardElevation="0dp"
+                        app:cardCornerRadius="5dp"
+                        android:layout_marginStart="@dimen/default_margin">
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/iv_character_tier_icon"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_doubutsu"
+                                android:layout_alignTop="@id/tv_tier_name"
+                                android:layout_alignBottom="@id/tv_tier_name"/>
+
+                            <TextView
+                                android:id="@+id/tv_tier_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="TIER"
+                                android:textColor="@color/white"
+                                android:fontFamily="@font/roboto_medium"
+                                android:layout_toEndOf="@id/iv_character_tier_icon"/>
+                        </RelativeLayout>
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_character_description"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/blue_dark2"
-                    app:contentPaddingTop="@dimen/small_margin"
-                    app:contentPaddingBottom="@dimen/small_margin"
-                    app:contentPaddingRight="@dimen/default_margin"
-                    app:contentPaddingLeft="@dimen/default_margin"
-                    app:cardElevation="0dp"
-                    app:cardCornerRadius="5dp"
-                    android:layout_marginStart="@dimen/default_margin">
+                    android:text="Super Smash Bros Ultimate Villager is from the Animal Crossing Series and ranks as a E Tier Pick (Below Average)."
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginStart="@dimen/default_margin"
+                    android:layout_marginEnd="@dimen/default_margin"
+                    android:paddingTop="@dimen/tiny_margin"
+                    android:paddingBottom="@dimen/tiny_margin"
+                    android:layout_marginTop="@dimen/default_margin"
+                    app:layout_constraintTop_toBottomOf="@id/ll_character_tags"
+                    app:layout_constraintStart_toStartOf="parent"/>
 
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <ImageView
-                            android:id="@+id/iv_character_tier_icon"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_doubutsu"
-                            android:layout_alignTop="@id/tv_tier_name"
-                            android:layout_alignBottom="@id/tv_tier_name"/>
-
-                        <TextView
-                            android:id="@+id/tv_tier_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="TIER"
-                            android:textColor="@color/white"
-                            android:fontFamily="@font/roboto_medium"
-                            android:layout_toEndOf="@id/iv_character_tier_icon"/>
-                    </RelativeLayout>
-                </com.google.android.material.card.MaterialCardView>
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/tv_character_description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Super Smash Bros Ultimate Villager is from the Animal Crossing Series and ranks as a E Tier Pick (Below Average)."
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:fontFamily="@font/roboto_regular"
-                android:padding="@dimen/default_margin"
-                android:layout_marginTop="@dimen/medium_margin"
-                app:layout_constraintTop_toBottomOf="@id/ll_character_tags"
-                app:layout_constraintStart_toStartOf="parent"/>
-
-            <FrameLayout
+                <FrameLayout
                 android:id="@+id/fl_character_stats"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -199,26 +216,28 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:nestedScrollingEnabled="false"
+                    android:layoutAnimation="@anim/character_animation"
+                    tools:listitem="@layout/item_character" />
+            </FrameLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/cl_character_stat_overview">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_characters"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layoutAnimation="@anim/character_animation"
                     tools:listitem="@layout/item_character" />
             </FrameLayout>
 
-<!--            <FrameLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:visibility="gone"-->
-<!--                app:layout_constraintTop_toBottomOf="@id/tv_character_description">-->
-<!--                <androidx.recyclerview.widget.RecyclerView-->
-<!--                    android:id="@+id/rv_characters"-->
-<!--                    android:layout_gravity="center_horizontal"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:layoutAnimation="@anim/character_animation"-->
-<!--                    tools:listitem="@layout/item_character" />-->
-<!--            </FrameLayout>-->
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
