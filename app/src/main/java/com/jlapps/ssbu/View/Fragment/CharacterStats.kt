@@ -58,8 +58,7 @@ class CharacterStats : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapter
         rv_character_stats.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL,false)
         rv_character_stats.adapter = DefaultRecyclerAdapter(char.attributes.getAttributes() as ArrayList<Any>,
             R.layout.item_character_stat,this)
-
-
+        
         rv_characters.layoutManager = LinearLayoutManager(context)
         rv_characters.adapter = DefaultRecyclerAdapter(characters as ArrayList<Any>,
             R.layout.item_character_counters,this)
@@ -69,11 +68,11 @@ class CharacterStats : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapter
         iv_overview_pill.setImageDrawable(activity?.getDrawable(R.drawable.ic_minus_to_plus))
 
         iv_overview_pill.setOnClickListener({
-            if(overviewCollapsed) {
+            if(!overviewCollapsed) {
                 (iv_overview_pill.drawable as AnimatedVectorDrawable).start()
                 overviewCollapsed = false
             }
-            else
+
         })
     }
 
