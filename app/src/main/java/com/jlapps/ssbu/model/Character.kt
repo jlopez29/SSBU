@@ -1,4 +1,4 @@
-package com.jlapps.ssbu.Model
+package com.jlapps.ssbu.model
 
 import java.io.Serializable
 

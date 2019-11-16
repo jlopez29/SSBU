@@ -1,8 +1,9 @@
-package com.jlapps.ssbu.View.Fragment
+package com.jlapps.ssbu.view.fragment
 
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.os.Bundle
 import android.os.Handler
+import android.transition.TransitionManager
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,34 +11,27 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.jlapps.ssbu.Model.Character
-import com.jlapps.ssbu.Model.CharacterAttributes
-import com.jlapps.ssbu.Model.CharacterComparison
+import com.jlapps.ssbu.model.Character
 
 import com.jlapps.ssbu.R
-import com.jlapps.ssbu.Util.SwipeView.SwipeListener
-import com.jlapps.ssbu.Util.SwipeView.SwipeView
-import com.jlapps.ssbu.View.Adapter.DefaultRecyclerAdapter
-import com.squareup.picasso.Picasso
+import com.jlapps.ssbu.model.CharacterList
+import com.jlapps.ssbu.util.AnimUtil.animateView
+import com.jlapps.ssbu.view.adapter.DefaultRecyclerAdapter
 import kotlinx.android.synthetic.main.fragment_character_stats.*
-import kotlinx.android.synthetic.main.item_character.view.*
-import kotlinx.android.synthetic.main.item_character.view.cv_character
 import kotlinx.android.synthetic.main.item_character_counters.view.*
 import kotlinx.android.synthetic.main.item_character_stat.view.*
 
 
 class CharacterStats : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapterListener<Any>{
 
-    var characters : ArrayList<Character> = ArrayList<Character>()
-    var skins: ArrayList<Int> = ArrayList(arrayListOf(R.drawable.img_villager, R.drawable.img_villager2,R.drawable.img_villager3,R.drawable.img_villager4,R.drawable.img_villager5,R.drawable.img_villager6,R.drawable.img_villager7,R.drawable.img_villager8))
-    var skinDex = 0
-    val animationDuration:Long = 435
+    private var characters : ArrayList<Character> = ArrayList()
+    private var skins: ArrayList<Int> = ArrayList(arrayListOf(R.drawable.img_villager, R.drawable.img_villager2,R.drawable.img_villager3,R.drawable.img_villager4,R.drawable.img_villager5,R.drawable.img_villager6,R.drawable.img_villager7,R.drawable.img_villager8))
+    private var skinDex = 0
 
-    var overviewCollapsed = false
+    private var overviewShowing = true
 
     val TAG = "CharStats"
 
@@ -59,21 +53,55 @@ class CharacterStats : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapter
         rv_character_stats.adapter = DefaultRecyclerAdapter(char.attributes.getAttributes() as ArrayList<Any>,
             R.layout.item_character_stat,this)
 
-        rv_characters.layoutManager = LinearLayoutManager(context)
-        rv_characters.adapter = DefaultRecyclerAdapter(characters as ArrayList<Any>,
+        characters = arrayListOf(CharacterList.getChar("Wario")!!,CharacterList.getChar("Wario")!!,CharacterList.getChar("Wario")!!,CharacterList.getChar("Wario")!!)
+
+        rv_character_counters.layoutManager = LinearLayoutManager(context)
+        rv_character_counters.adapter = DefaultRecyclerAdapter(characters as ArrayList<Any>,
             R.layout.item_character_counters,this)
 
         iv_character_image.setOnClickListener { transitionSkinView() }
 
         iv_overview_pill.setImageDrawable(activity?.getDrawable(R.drawable.ic_minus_to_plus))
+        iv_counters_pill.setImageDrawable(activity?.getDrawable(R.drawable.ic_minus_to_plus))
 
-        iv_overview_pill.setOnClickListener({
-            if(!overviewCollapsed) {
+//        cl_character_stat_container.layoutTransition.setAnimateParentHierarchy(false)
+
+
+        //TODO Fix horizontal scrolling after collapse
+
+        iv_overview_pill.setOnClickListener {
+
+            if(cl_character_stat_overview.visibility == View.GONE) {
+                cl_character_stat_overview.visibility = View.VISIBLE
+//                TransitionManager.beginDelayedTransition(cl_character_stat_container)
+                animateView(iv_overview_pill.context, R.anim.slide_down_from_top, cl_character_stat_overview){rv_character_stats.isNestedScrollingEnabled = false}
+                iv_overview_pill.setImageDrawable(activity?.getDrawable(R.drawable.ic_plus_to_minus))
                 (iv_overview_pill.drawable as AnimatedVectorDrawable).start()
-                overviewCollapsed = false
+            }else {
+//                TransitionManager.beginDelayedTransition(cl_character_stat_container)
+                animateView(iv_overview_pill.context, R.anim.slide_up_to_top, cl_character_stat_overview){cl_character_stat_overview.visibility = View.GONE }
+                iv_overview_pill.setImageDrawable(activity?.getDrawable(R.drawable.ic_minus_to_plus))
+                (iv_overview_pill.drawable as AnimatedVectorDrawable).start()
             }
 
-        })
+        }
+
+        iv_counters_pill.setOnClickListener {
+
+            if(cl_character_counters.visibility == View.GONE) {
+                cl_character_counters.visibility = View.VISIBLE
+//                TransitionManager.beginDelayedTransition(cl_character_stat_container)
+                animateView(iv_counters_pill.context, R.anim.slide_down_from_top, cl_character_counters){rv_character_stats.isNestedScrollingEnabled = false}
+                iv_counters_pill.setImageDrawable(activity?.getDrawable(R.drawable.ic_plus_to_minus))
+                (iv_counters_pill.drawable as AnimatedVectorDrawable).start()
+            }else {
+//                TransitionManager.beginDelayedTransition(cl_character_stat_container)
+                animateView(iv_counters_pill.context, R.anim.slide_up_to_top, cl_character_counters){cl_character_counters.visibility = View.GONE }
+                iv_counters_pill.setImageDrawable(activity?.getDrawable(R.drawable.ic_minus_to_plus))
+                (iv_counters_pill.drawable as AnimatedVectorDrawable).start()
+            }
+
+        }
     }
 
     override fun bindItemToView(item: Any, position: Int, viewHolder: RecyclerView.ViewHolder) {

@@ -1,4 +1,4 @@
-package com.jlapps.ssbu.View.Adapter
+package com.jlapps.ssbu.view.adapter
 
 import androidx.recyclerview.widget.RecyclerView
 

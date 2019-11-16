@@ -1,4 +1,4 @@
-package com.jlapps.ssbu.Util.SwipeView
+package com.jlapps.ssbu.util.SwipeView
 
 interface SwipeListener {
     fun onSwipedLeft(swipeActionView: SwipeView): Boolean

@@ -1,4 +1,4 @@
-package com.jlapps.ssbu.Util.SwipeView
+package com.jlapps.ssbu.util.SwipeView
 
 import android.annotation.SuppressLint
 import android.graphics.Canvas

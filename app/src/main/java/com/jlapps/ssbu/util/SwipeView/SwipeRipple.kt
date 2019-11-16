@@ -1,4 +1,4 @@
-package com.jlapps.ssbu.Util.SwipeView
+package com.jlapps.ssbu.util.SwipeView
 
 import android.animation.ObjectAnimator
 import android.graphics.*

@@ -1,4 +1,4 @@
-package com.jlapps.ssbu.Model
+package com.jlapps.ssbu.model
 
 object CharacterComparison {
     var selectingChar1 = true

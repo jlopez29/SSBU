@@ -1,4 +1,4 @@
-package com.jlapps.ssbu.View.Fragment
+package com.jlapps.ssbu.view.fragment
 
 import android.os.Bundle
 import android.os.Handler
@@ -12,22 +12,23 @@ import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.jlapps.ssbu.View.Adapter.DefaultRecyclerAdapter
-import com.jlapps.ssbu.Model.*
+import com.jlapps.ssbu.view.adapter.DefaultRecyclerAdapter
+import com.jlapps.ssbu.model.*
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_character.view.*
 import kotlinx.android.synthetic.main.fragment_character_selection.*
 
 import com.jlapps.ssbu.R
-import com.jlapps.ssbu.Util.FragUtil
-import com.jlapps.ssbu.Util.SwipeView.SwipeListener
-import com.jlapps.ssbu.Util.SwipeView.SwipeView
+import com.jlapps.ssbu.model.CharacterList.characters
+import com.jlapps.ssbu.util.AnimUtil.fadeView
+import com.jlapps.ssbu.util.FragUtil
+import com.jlapps.ssbu.util.SwipeView.SwipeListener
+import com.jlapps.ssbu.util.SwipeView.SwipeView
 
 
 class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapterListener<Character>{
 
     val TAG = "CharSelect"
-    var characters : ArrayList<Character> = ArrayList<Character>()
     val animationDuration:Long = 435
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -37,7 +38,6 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        characters = initChars()
 
 
         (activity as AppCompatActivity).setSupportActionBar(tb_char_selection)
@@ -82,12 +82,12 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
 
                 if(viewHolder.itemView.iv_character_fav_ic.visibility == View.VISIBLE) {
 
-                    fadeView(false,viewHolder.itemView.iv_character_fav_ic)
+                    fadeView(swipeActionView.context,false,viewHolder.itemView.iv_character_fav_ic)
 
                     item.isFavorite = false
                 }
                 else {
-                    fadeView(true,viewHolder.itemView.iv_character_fav_ic)
+                    fadeView(swipeActionView.context,true,viewHolder.itemView.iv_character_fav_ic)
                     item.isFavorite = true
                 }
 
@@ -134,8 +134,7 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
             FragUtil.swapFragment(activity as AppCompatActivity,FragUtil.fragmentCharacterStats,true,args)
         }
 
-        Picasso
-            .get()
+        Picasso.get()
             .load(item.image).resize(800,0).centerInside()
             .into(viewHolder.itemView.iv_character)
         viewHolder.itemView.iv_character_mark.setImageResource(item.mark)
@@ -146,155 +145,6 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
         var args = Bundle()
         args.putSerializable("char",item)
         FragUtil.swapFragment(activity as AppCompatActivity,FragUtil.fragmentCharacterStats,true,args)
-    }
-
-    fun initChars():ArrayList<Character>{
-        val list = ArrayList<Character>()
-        list.add(
-            Character(
-                0,
-                "Villager",
-                "animal_crossing",
-                'E',
-                R.drawable.img_villager,
-                R.drawable.doubutsu,
-                CharacterAttributes(60,40,80,20,80,40,20,40)
-            )
-        )
-        list.add(
-            Character(
-                1,
-                "Terry",
-                "animal_crossing",
-                'E',
-                R.drawable.img_terry,
-                R.drawable.garou,
-                CharacterAttributes(60,40,80,20,80,40,20,40)
-            )
-        )
-        list.add(
-            Character(
-                2,
-                "Toon Link",
-                "animal_crossing",
-                'E',
-                R.drawable.img_toon_link,
-                R.drawable.zelda,
-                CharacterAttributes(60,40,80,20,80,40,20,40)
-            )
-        )
-        list.add(
-            Character(
-                3,
-                "Wario",
-                "animal_crossing",
-                'E',
-                R.drawable.img_wario,
-                R.drawable.wario,
-                CharacterAttributes(60,40,80,20,80,40,20,40)
-            )
-        )
-        list.add(
-            Character(
-                4,
-                "Wii Fit Trainer",
-                "animal_crossing",
-                'E',
-                R.drawable.img_wii_fit_trainer,
-                R.drawable.wii_fit,
-                CharacterAttributes(60,40,80,20,80,40,20,40)
-            )
-        )
-        list.add(
-            Character(
-                5,
-                "Wolf",
-                "animal_crossing",
-                'E',
-                R.drawable.img_wolf,
-                R.drawable.starfox,
-                CharacterAttributes(60,40,80,20,80,40,20,40)
-            )
-        )
-        list.add(
-            Character(
-                6,
-                "Yoshi",
-                "animal_crossing",
-                'E',
-                R.drawable.img_yoshi,
-                R.drawable.yoshi,
-                CharacterAttributes(60,40,80,20,80,40,20,40)
-            )
-        )
-        list.add(
-            Character(
-                7,
-                "Young Link",
-                "animal_crossing",
-                'E',
-                R.drawable.img_young_link,
-                R.drawable.zelda,
-                CharacterAttributes(60,40,80,20,80,40,20,40)
-            )
-        )
-        list.add(
-            Character(
-                8,
-                "Zelda",
-                "animal_crossing",
-                'E',
-                R.drawable.img_zelda,
-                R.drawable.zelda,
-                CharacterAttributes(60,40,80,20,80,40,20,40)
-            )
-        )
-        list.add(
-            Character(
-                9,
-                "Zero Suit Samus",
-                "animal_crossing",
-                'E',
-                R.drawable.img_zero_suit_samus,
-                R.drawable.metroid,
-                CharacterAttributes(60,40,80,20,80,40,20,40)
-            )
-        )
-        return list
-    }
-
-    fun fadeView(fadeIn:Boolean,view:View){
-        lateinit var animation: Animation
-
-        if(fadeIn) {
-            animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
-            animation.setAnimationListener(object : Animation.AnimationListener {
-                override fun onAnimationRepeat(animation: Animation?) {
-                }
-
-                override fun onAnimationEnd(animation: Animation?) {
-                    view.visibility = View.VISIBLE
-                }
-
-                override fun onAnimationStart(animation: Animation?) {
-                }
-            })
-        }else
-        {
-            animation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
-            animation.setAnimationListener(object : Animation.AnimationListener {
-                override fun onAnimationRepeat(animation: Animation?) {
-                }
-
-                override fun onAnimationEnd(animation: Animation?) {
-                    view.visibility = View.GONE
-                }
-
-                override fun onAnimationStart(animation: Animation?) {
-                }
-            })
-        }
-        view.startAnimation(animation)
     }
 
     fun setSelection(viewHolder: RecyclerView.ViewHolder, item: Character, position: Int, selected:Boolean){
@@ -358,6 +208,8 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
 
         var view = rv_characters.layoutManager?.findViewByPosition(pos)
         view?.sv_layout?.cv_character?.strokeColor = resources.getColor(android.R.color.transparent,null)
+//        view?.iv_character_select?.visibility = View.VISIBLE
+//        view?.iv_character_deselect?.visibility = View.INVISIBLE
     }
 
     fun changeSelectionBackground(viewHolder: RecyclerView.ViewHolder,selected:Boolean){

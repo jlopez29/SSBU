@@ -1,4 +1,4 @@
-package com.jlapps.ssbu.Util.SwipeView
+package com.jlapps.ssbu.util.SwipeView
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -20,8 +20,6 @@ import android.view.ViewConfiguration
 import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
 import androidx.annotation.ColorInt
-import androidx.recyclerview.widget.RecyclerView
-import com.jlapps.ssbu.Model.Character
 import com.jlapps.ssbu.R
 
 class SwipeView : FrameLayout {

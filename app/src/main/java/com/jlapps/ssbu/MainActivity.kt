@@ -2,7 +2,7 @@ package com.jlapps.ssbu
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.jlapps.ssbu.Util.FragUtil
+import com.jlapps.ssbu.util.FragUtil
 
 class MainActivity : AppCompatActivity(){
 

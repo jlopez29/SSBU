@@ -1,4 +1,4 @@
-package com.jlapps.ssbu.Model
+package com.jlapps.ssbu.model
 
 class CharacterAttributes constructor(damage:Int,weight:Int,defense:Int,killPower:Int,speed:Int,recovery:Int,neutral:Int,taunt:Int){
     var damage = damage
