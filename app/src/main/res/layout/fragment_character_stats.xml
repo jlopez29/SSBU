@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/cl_stat_container"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,12 +8,10 @@
     android:layout_height="match_parent"
     android:background="@color/primary"
     android:fitsSystemWindows="true"
-    android:animateLayoutChanges="true"
     tools:context=".MainActivity">
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:animateLayoutChanges="true">
+        android:layout_height="match_parent">
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar"
             android:layout_width="match_parent"
@@ -68,47 +67,52 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:animateLayoutChanges="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:id="@+id/cl_character_stat_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:animateLayoutChanges="true">
-                    <LinearLayout
-                        android:id="@+id/ll_character_stats_overview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/default_margin"
-                        android:layout_marginEnd="@dimen/default_margin"
-                        android:paddingTop="@dimen/tiny_margin"
-                        android:paddingBottom="@dimen/tiny_margin"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent">
-                        <ImageView
-                            android:id="@+id/iv_overview_pill"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="center_vertical"
-                            />
+                    android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/tv_overview"
+
+                    <LinearLayout
+                        android:id="@+id/ll_overview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <LinearLayout
+                            android:id="@+id/ll_character_stats_overview"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Overview"
-                            android:textColor="@color/white"
-                            android:textSize="20sp"
-                            android:fontFamily="@font/roboto_medium"
                             android:layout_marginStart="@dimen/default_margin"
-                            />
-                    </LinearLayout>
+                            android:layout_marginEnd="@dimen/default_margin"
+                            android:paddingTop="@dimen/tiny_margin"
+                            android:paddingBottom="@dimen/tiny_margin"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent">
+                            <ImageView
+                                android:id="@+id/iv_overview_pill"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center_vertical"
+                                />
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
+                            <TextView
+                                android:id="@+id/tv_overview"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Overview"
+                                android:textColor="@color/white"
+                                android:textSize="20sp"
+                                android:fontFamily="@font/roboto_medium"
+                                android:layout_marginStart="@dimen/default_margin"
+                                />
+                        </LinearLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cl_character_stat_overview"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:animateLayoutChanges="true"
                         app:layout_constraintTop_toBottomOf="@id/ll_character_stats_overview">
                         <LinearLayout
                             android:id="@+id/ll_character_tags"
@@ -175,11 +179,17 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content">
 
-                                    <ImageView
+                                    <TextView
                                         android:id="@+id/iv_character_tier_icon"
-                                        android:layout_width="24dp"
-                                        android:layout_height="24dp"
-                                        android:src="@drawable/ic_doubutsu"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="E"
+                                        android:textColor="@color/blue_text"
+                                        android:textStyle="bold"
+                                        android:textAlignment="center"
+                                        android:autoSizeTextType="uniform"
+                                        android:layout_marginEnd="@dimen/small_margin"
+                                        android:fontFamily="@font/roboto_boldcondensed"
                                         android:layout_alignTop="@id/tv_tier_name"
                                         android:layout_alignBottom="@id/tv_tier_name"/>
 
@@ -215,92 +225,94 @@
                             android:id="@+id/fl_character_stats"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:animateLayoutChanges="true"
                             app:layout_constraintTop_toBottomOf="@id/tv_character_description">
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/rv_character_stats"
                                 android:layout_gravity="center_horizontal"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:animateLayoutChanges="true"
                                 android:nestedScrollingEnabled="false"
-                                android:layoutAnimation="@anim/character_animation"
                                 tools:listitem="@layout/item_character" />
                         </FrameLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <LinearLayout
-                        android:id="@+id/ll_character_counters"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/default_margin"
-                        android:layout_marginEnd="@dimen/default_margin"
-                        android:paddingTop="@dimen/tiny_margin"
-                        android:paddingBottom="@dimen/tiny_margin"
-                        app:layout_constraintTop_toBottomOf="@id/cl_character_stat_overview"
-                        app:layout_constraintStart_toStartOf="parent">
-                        <ImageView
-                            android:id="@+id/iv_counters_pill"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="center_vertical"
-                            />
-
-                        <TextView
-                            android:id="@+id/tv_counters"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Counter Matchups"
-                            android:textColor="@color/white"
-                            android:textSize="20sp"
-                            android:fontFamily="@font/roboto_medium"
-                            android:layout_marginStart="@dimen/default_margin"
-                            />
                     </LinearLayout>
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/cl_character_counters"
+                    <LinearLayout
+                        android:id="@+id/ll_counters"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:animateLayoutChanges="true"
-                        app:layout_constraintTop_toBottomOf="@id/ll_character_counters">
-
-                        <TextView
-                            android:id="@+id/tv_character_counters_description"
-                            android:layout_width="match_parent"
+                        android:orientation="vertical">
+                        <LinearLayout
+                            android:id="@+id/ll_character_counters"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Super Smash Bros Ultimate Villager is from the Animal Crossing Series and ranks as a E Tier Pick (Below Average)."
-                            android:textColor="@color/white"
-                            android:textSize="20sp"
-                            android:fontFamily="@font/roboto_regular"
                             android:layout_marginStart="@dimen/default_margin"
                             android:layout_marginEnd="@dimen/default_margin"
                             android:paddingTop="@dimen/tiny_margin"
                             android:paddingBottom="@dimen/tiny_margin"
-                            android:layout_marginTop="@dimen/default_margin"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"/>
+                            app:layout_constraintTop_toBottomOf="@id/cl_character_stat_overview"
+                            app:layout_constraintStart_toStartOf="parent">
+                            <ImageView
+                                android:id="@+id/iv_counters_pill"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center_vertical"
+                                />
 
-                        <FrameLayout
-                            android:id="@+id/fl_character_counters"
+                            <TextView
+                                android:id="@+id/tv_counters"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Counter Matchups"
+                                android:textColor="@color/white"
+                                android:textSize="20sp"
+                                android:fontFamily="@font/roboto_medium"
+                                android:layout_marginStart="@dimen/default_margin"
+                                />
+                        </LinearLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/cl_character_counters"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:animateLayoutChanges="true"
-                            app:layout_constraintTop_toBottomOf="@id/tv_character_counters_description">
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/rv_character_counters"
-                                android:layout_gravity="center_horizontal"
+                            app:layout_constraintTop_toBottomOf="@id/ll_character_counters">
+
+                            <TextView
+                                android:id="@+id/tv_character_counters_description"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="The best character matchups for Villager, these are counter picks villager is weak against."
+                                android:textColor="@color/white"
+                                android:textSize="20sp"
+                                android:fontFamily="@font/roboto_regular"
+                                android:layout_marginStart="@dimen/default_margin"
+                                android:layout_marginEnd="@dimen/default_margin"
+                                android:paddingTop="@dimen/tiny_margin"
+                                android:paddingBottom="@dimen/tiny_margin"
+                                android:layout_marginTop="@dimen/default_margin"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"/>
+
+                            <FrameLayout
+                                android:id="@+id/fl_character_counters"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
                                 android:animateLayoutChanges="true"
-                                android:nestedScrollingEnabled="false"
-                                android:layoutAnimation="@anim/character_animation"
-                                tools:listitem="@layout/item_character" />
-                        </FrameLayout>
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                                app:layout_constraintTop_toBottomOf="@id/tv_character_counters_description">
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/rv_character_counters"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:nestedScrollingEnabled="false"
+                                    android:layoutAnimation="@anim/character_animation"
+                                    tools:listitem="@layout/item_character" />
+                            </FrameLayout>
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </LinearLayout>
 
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

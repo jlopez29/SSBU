@@ -21,6 +21,8 @@ object FragUtil {
                 fragmentCharacterSelect,
                 backStack,
                 R.anim.slide_in_right,
+                R.anim.slide_out_left,
+                R.anim.slide_in_left,
                 R.anim.slide_out_right,
                 args
             )
@@ -30,18 +32,20 @@ object FragUtil {
                 fragmentCharacterStats,
                 backStack,
                 R.anim.slide_in_right,
+                R.anim.slide_out_left,
+                R.anim.slide_in_left,
                 R.anim.slide_out_right,
                 args
             )
         }
     }
 
-    private fun showFragment(act:AppCompatActivity, frag: Fragment, tag: String, bs: Boolean, animIn: Int, animOut: Int,args:Bundle) {
+    private fun showFragment(act:AppCompatActivity, frag: Fragment, tag: String, bs: Boolean, animIn: Int, animOut: Int,popIn: Int, popOut: Int,args:Bundle) {
         frag.arguments = args
 
         val fragmentTransaction = act.supportFragmentManager.beginTransaction()
 
-        fragmentTransaction.setCustomAnimations(animIn, animOut, animIn, animOut)
+        fragmentTransaction.setCustomAnimations(animIn, animOut, popIn, popOut)
             .replace(R.id.cl_main, frag, tag)
 
         if (bs)

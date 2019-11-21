@@ -31,8 +31,6 @@ class CharacterStats : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapter
     private var skins: ArrayList<Int> = ArrayList(arrayListOf(R.drawable.img_villager, R.drawable.img_villager2,R.drawable.img_villager3,R.drawable.img_villager4,R.drawable.img_villager5,R.drawable.img_villager6,R.drawable.img_villager7,R.drawable.img_villager8))
     private var skinDex = 0
 
-    private var overviewShowing = true
-
     val TAG = "CharStats"
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -64,8 +62,6 @@ class CharacterStats : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapter
         iv_overview_pill.setImageDrawable(activity?.getDrawable(R.drawable.ic_minus_to_plus))
         iv_counters_pill.setImageDrawable(activity?.getDrawable(R.drawable.ic_minus_to_plus))
 
-//        cl_character_stat_container.layoutTransition.setAnimateParentHierarchy(false)
-
 
         //TODO Fix horizontal scrolling after collapse
 
@@ -73,12 +69,12 @@ class CharacterStats : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapter
 
             if(cl_character_stat_overview.visibility == View.GONE) {
                 cl_character_stat_overview.visibility = View.VISIBLE
-//                TransitionManager.beginDelayedTransition(cl_character_stat_container)
-                animateView(iv_overview_pill.context, R.anim.slide_down_from_top, cl_character_stat_overview){rv_character_stats.isNestedScrollingEnabled = false}
+                TransitionManager.beginDelayedTransition(cl_character_stat_container)
+                animateView(iv_overview_pill.context, R.anim.slide_down_from_top, cl_character_stat_overview){}
                 iv_overview_pill.setImageDrawable(activity?.getDrawable(R.drawable.ic_plus_to_minus))
                 (iv_overview_pill.drawable as AnimatedVectorDrawable).start()
             }else {
-//                TransitionManager.beginDelayedTransition(cl_character_stat_container)
+                TransitionManager.beginDelayedTransition(cl_character_stat_container)
                 animateView(iv_overview_pill.context, R.anim.slide_up_to_top, cl_character_stat_overview){cl_character_stat_overview.visibility = View.GONE }
                 iv_overview_pill.setImageDrawable(activity?.getDrawable(R.drawable.ic_minus_to_plus))
                 (iv_overview_pill.drawable as AnimatedVectorDrawable).start()

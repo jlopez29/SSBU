@@ -149,7 +149,9 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
 
     fun setSelection(viewHolder: RecyclerView.ViewHolder, item: Character, position: Int, selected:Boolean){
         if(selected){
+            Log.e(TAG,"Select")
             if(CharacterComparison.selectingChar1) {
+                Log.e(TAG,"Select 1")
                 CharacterComparison.char1.isSelected = false
                 if (CharacterComparison.char1.id != -1)
                     removeBorder(CharacterComparison.char1.id)
@@ -168,6 +170,7 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
             }
             else
             {
+                Log.e(TAG,"Select 2")
                 CharacterComparison.char2.isSelected = false
                 if(CharacterComparison.char2.id != -1)
                     removeBorder(CharacterComparison.char2.id)
@@ -183,8 +186,9 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
             }
 
         }else {
+            Log.e(TAG,"Deselect")
             if (CharacterComparison.selectingChar1) {
-
+                Log.e(TAG,"Select 1")
                 activity?.actionBar?.subtitle = ""
                 removeBorder(CharacterComparison.char1.id)
                 CharacterComparison.char1 = Character()
@@ -193,7 +197,7 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
                 CharacterComparison.selectingChar1 = true
             }
             else {
-
+                Log.e(TAG,"Select 2")
                 activity?.actionBar?.subtitle = ""
                 removeBorder(CharacterComparison.char2.id)
                 CharacterComparison.char2 = Character()

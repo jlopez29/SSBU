@@ -9,7 +9,6 @@
     android:paddingEnd="@dimen/default_margin"
     android:paddingTop="@dimen/large_margin"
     android:paddingBottom="@dimen/default_margin"
-    android:foreground="?selectableItemBackground"
     android:clipToPadding="false"
     android:clipChildren="false">
 
@@ -17,6 +16,7 @@
         android:id="@+id/cv_character_stat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:foreground="?android:selectableItemBackground"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
 
@@ -37,9 +37,8 @@
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iv_character_stat_icon"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:src="@drawable/ic_speed"
-                android:tint="@color/white"
                 android:layout_marginBottom="@dimen/default_margin"
                 android:layout_gravity="center_horizontal"/>
             
