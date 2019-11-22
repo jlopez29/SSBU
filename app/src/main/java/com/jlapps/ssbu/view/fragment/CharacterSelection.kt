@@ -10,6 +10,8 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jlapps.ssbu.view.adapter.DefaultRecyclerAdapter
@@ -24,12 +26,14 @@ import com.jlapps.ssbu.util.AnimUtil.fadeView
 import com.jlapps.ssbu.util.FragUtil
 import com.jlapps.ssbu.util.SwipeView.SwipeListener
 import com.jlapps.ssbu.util.SwipeView.SwipeView
+import com.jlapps.ssbu.viewmodel.SmashViewModel
 
 
 class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapterListener<Character>{
 
     val TAG = "CharSelect"
     val animationDuration:Long = 435
+    lateinit var viewModel: SmashViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_character_selection,container,false)
@@ -38,8 +42,7 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-
-
+        viewModel= ViewModelProviders.of(activity!!).get(SmashViewModel::class.java)
         (activity as AppCompatActivity).setSupportActionBar(tb_char_selection)
 
 
@@ -149,9 +152,9 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
 
     fun setSelection(viewHolder: RecyclerView.ViewHolder, item: Character, position: Int, selected:Boolean){
         if(selected){
-            Log.e(TAG,"Select")
+//            Log.e(TAG,"Select")
             if(CharacterComparison.selectingChar1) {
-                Log.e(TAG,"Select 1")
+//                Log.e(TAG,"Select 1")
                 CharacterComparison.char1.isSelected = false
                 if (CharacterComparison.char1.id != -1)
                     removeBorder(CharacterComparison.char1.id)
@@ -165,12 +168,12 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
                 CharacterComparison.selectingChar1 = false
                 changeSelectionBackground(viewHolder, true)
                 if(CharacterComparison.char2.id != -1)
-                    activity?.actionBar?.subtitle =  "${CharacterComparison.char1.name} v ${CharacterComparison.char2.name}"
+                    triggerCompareView(true)
                 
             }
             else
             {
-                Log.e(TAG,"Select 2")
+//                Log.e(TAG,"Select 2")
                 CharacterComparison.char2.isSelected = false
                 if(CharacterComparison.char2.id != -1)
                     removeBorder(CharacterComparison.char2.id)
@@ -181,14 +184,14 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
                     resources.getColor(R.color.blue_text,null)
                 changeSelectionBackground(viewHolder,true)
                 if(CharacterComparison.char1.id != -1)
-                    activity?.actionBar?.subtitle =  "${CharacterComparison.char1.name} v ${CharacterComparison.char2.name}"
+                    triggerCompareView(false)
 
             }
 
         }else {
-            Log.e(TAG,"Deselect")
+//            Log.e(TAG,"Deselect")
             if (CharacterComparison.selectingChar1) {
-                Log.e(TAG,"Select 1")
+//                Log.e(TAG,"Select 1")
                 activity?.actionBar?.subtitle = ""
                 removeBorder(CharacterComparison.char1.id)
                 CharacterComparison.char1 = Character()
@@ -197,7 +200,7 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
                 CharacterComparison.selectingChar1 = true
             }
             else {
-                Log.e(TAG,"Select 2")
+//                Log.e(TAG,"Select 2")
                 activity?.actionBar?.subtitle = ""
                 removeBorder(CharacterComparison.char2.id)
                 CharacterComparison.char2 = Character()
@@ -208,10 +211,23 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
         }
     }
 
+    fun triggerCompareView(isCharOne:Boolean){
+        if(activity?.supportFragmentManager?.findFragmentById(R.id.cl_main) is CharacterCompare)
+                viewModel.setChar(isCharOne)
+        else
+            FragUtil.swapFragment(activity as AppCompatActivity,FragUtil.fragmentCharacterComp,false,Bundle())
+    }
+
     fun removeBorder(pos:Int){
 
         var view = rv_characters.layoutManager?.findViewByPosition(pos)
+        if(view == null)
+            Log.e(TAG,"view null")
         view?.sv_layout?.cv_character?.strokeColor = resources.getColor(android.R.color.transparent,null)
+
+        view?.iv_character_select?.visibility = View.VISIBLE
+        view?.iv_character_deselect?.visibility = View.INVISIBLE
+
 //        view?.iv_character_select?.visibility = View.VISIBLE
 //        view?.iv_character_deselect?.visibility = View.INVISIBLE
     }

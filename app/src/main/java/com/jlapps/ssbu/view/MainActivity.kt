@@ -1,7 +1,8 @@
-package com.jlapps.ssbu
+package com.jlapps.ssbu.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.jlapps.ssbu.R
 import com.jlapps.ssbu.util.FragUtil
 
 class MainActivity : AppCompatActivity(){

@@ -1,23 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/bg_compare_gradient"
-    android:clipChildren="false">
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/abl_char_compare"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:background="@android:color/transparent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_char_compare_bottom_sheet"
         android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
-        android:elevation="1dp"
-        android:background="@android:color/transparent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:layout_height="match_parent"
+        android:clipChildren="false"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/shadow"
+        app:behavior_peekHeight="275dp"
+        app:behavior_hideable="true"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/tb_char_selection"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
+            android:visibility="gone"
+            android:elevation="1dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:contentInsetStart="0dp">
 
             <RelativeLayout
@@ -41,347 +49,476 @@
             </RelativeLayout>
 
         </androidx.appcompat.widget.Toolbar>
-    </com.google.android.material.appbar.AppBarLayout>
-    
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/abl_char_compare">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_char_selection">
 
-            <LinearLayout
-                android:id="@+id/ll_character_compare_blobs"
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:clipChildren="false"
-                app:layout_constraintTop_toTopOf="parent"
-                android:weightSum="10">
+                android:clipChildren="true"
+                android:elevation="2dp"
+                android:background="@drawable/bg_compare_gradient_rounded">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipChildren="false">
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:id="@+id/ll_character_compare_blobs"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toTopOf="parent"
                     android:layout_marginTop="@dimen/xlarge_margin"
-                    android:layout_weight="5">
+                    android:weightSum="10"
+                    android:clipChildren="false">
 
-                    <ImageView
-                        android:layout_width="125dp"
-                        android:layout_height="125dp"
-                        android:scaleX="-1"
-                        android:src="@drawable/img_villager"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <RelativeLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Villager"
-                        android:layout_marginTop="@dimen/default_margin"
-                        android:layout_marginStart="@dimen/default_margin"
-                        style="@style/text_fighter_comp_white" />
+                        android:layout_weight="5"
+                        android:clipChildren="false">
+                        <ImageView
+                            android:src="@drawable/ic_blob_left"
+                            android:scaleType="centerInside"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:scaleX="1.2"
+                            android:scaleY="1.2"
+                            android:layout_alignTop="@+id/ll_char1_comp"
+                            android:layout_alignBottom="@id/ll_char1_comp"
+                            android:layout_alignStart="@id/ll_char1_comp"
+                            android:layout_alignParentEnd="true" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                        <ImageView
+                            android:id="@+id/iv_char1_series"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/xlarge_margin"
+                            android:src="@drawable/ic_doubutsu"
+                            android:alpha=".2"/>
+                        <LinearLayout
+                            android:id="@+id/ll_char1_comp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/iv_char1"
+                                android:layout_width="125dp"
+                                android:layout_height="125dp"
+                                android:scaleX="-1"
+                                android:src="@drawable/img_villager"/>
+
+                            <TextView
+                                android:id="@+id/tv_char1_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Villager"
+                                android:layout_marginTop="@dimen/default_margin"
+                                android:layout_marginStart="@dimen/default_margin"
+                                style="@style/text_fighter_comp_white" />
+
+                            <TextView
+                                android:id="@+id/tv_char1_series"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Animal Crossing"
+                                android:layout_marginTop="@dimen/default_margin"
+                                android:layout_marginStart="@dimen/default_margin"
+                                style="@style/text_series_white" />
+
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Animal Crossing"
-                        android:layout_marginTop="@dimen/default_margin"
-                        android:layout_marginStart="@dimen/default_margin"
-                        style="@style/text_series_white" />
+                        android:layout_weight="5"
+                        android:clipChildren="false">
+                        <ImageView
+                            android:src="@drawable/ic_blob_right"
+                            android:scaleType="centerInside"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:scaleX="1.2"
+                            android:scaleY="1.2"
+                            android:layout_alignTop="@+id/ll_char2_comp"
+                            android:layout_alignBottom="@id/ll_char2_comp"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignEnd="@id/ll_char2_comp" />
+
+                        <ImageView
+                            android:id="@+id/iv_char2_series"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/xlarge_margin"
+                            android:layout_alignParentEnd="true"
+                            android:src="@drawable/mii"
+                            android:alpha=".2"/>
+                        <LinearLayout
+                            android:id="@+id/ll_char2_comp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/iv_char2"
+                                android:layout_width="125dp"
+                                android:layout_height="125dp"
+                                android:layout_gravity="end"
+                                android:scaleX="-1"
+                                android:src="@drawable/img_jigglypuff"/>
+                            <TextView
+                                android:id="@+id/tv_char2_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Jigglypuff"
+                                android:layout_gravity="end"
+                                android:layout_marginTop="@dimen/default_margin"
+                                android:layout_marginEnd="@dimen/default_margin"
+                                style="@style/text_fighter_comp_white" />
+
+                            <TextView
+                                android:id="@+id/tv_char2_series"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Pokemon"
+                                android:layout_gravity="end"
+                                android:layout_marginTop="@dimen/default_margin"
+                                android:layout_marginEnd="@dimen/default_margin"
+                                style="@style/text_series_white" />
+
+                        </LinearLayout>
+                    </RelativeLayout>
+
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:id="@+id/ll_character_compare_stats"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_marginTop="@dimen/xlarge_margin"
-                    android:layout_weight="5">
+                    android:layout_marginTop="@dimen/default_margin"
+                    android:layout_marginBottom="@dimen/default_margin"
+                    app:layout_constraintTop_toBottomOf="@id/ll_character_compare_blobs">
 
                     <ImageView
-                        android:layout_width="125dp"
-                        android:layout_height="125dp"
-                        android:layout_gravity="end"
-                        android:scaleX="-1"
-                        android:src="@drawable/img_jigglypuff"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Jigglypuff"
-                        android:layout_gravity="end"
-                        android:layout_marginTop="@dimen/default_margin"
-                        android:layout_marginEnd="@dimen/default_margin"
-                        style="@style/text_fighter_comp_white" />
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_weight"
+                        android:layout_gravity="center_horizontal"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Pokemon"
-                        android:layout_gravity="end"
-                        android:layout_marginTop="@dimen/default_margin"
-                        android:layout_marginEnd="@dimen/default_margin"
-                        style="@style/text_series_white" />
+                        android:text="Weight"
+                        android:layout_marginTop="@dimen/small_margin"
+                        android:layout_gravity="center_horizontal"
+                        style="@style/text_stat_white" />
 
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/small_margin">
+                        <ProgressBar
+                            android:id="@+id/pb_char1_comp_weight_progress"
+                            xmlns:tools="http://schemas.android.com/tools"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="0dp"
+                            android:layout_height="8dp"
+                            android:progressDrawable="@drawable/pb_compare_stats"
+                            android:layout_marginStart="@dimen/default_margin"
+                            tools:progress="60"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/v_char_comp_weight_div"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
+                        <View
+                            android:id="@+id/v_char_comp_weight_div"
+                            android:layout_width="2dp"
+                            android:layout_height="12dp"
+                            android:background="@color/blue_text"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/pb_char1_comp_weight_progress"
+                            app:layout_constraintEnd_toStartOf="@id/pb_char2_comp_weight_progress"/>
+
+                        <ProgressBar
+                            android:id="@+id/pb_char2_comp_weight_progress"
+                            xmlns:tools="http://schemas.android.com/tools"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="0dp"
+                            android:layout_height="8dp"
+                            android:scaleX="-1"
+                            android:layout_marginEnd="@dimen/default_margin"
+                            android:progressDrawable="@drawable/pb_compare_stats2"
+                            tools:progress="60"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/v_char_comp_weight_div"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginTop="@dimen/large_margin"
+                        android:src="@drawable/ic_speed"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Speed"
+                        android:layout_marginTop="@dimen/small_margin"
+                        android:layout_gravity="center_horizontal"
+                        style="@style/text_stat_white" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/small_margin">
+                        <ProgressBar
+                            android:id="@+id/pb_char1_comp_speed_progress"
+                            xmlns:tools="http://schemas.android.com/tools"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="0dp"
+                            android:layout_height="8dp"
+                            android:progressDrawable="@drawable/pb_compare_stats"
+                            android:layout_marginStart="@dimen/default_margin"
+                            tools:progress="60"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/v_char_comp_speed_div"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
+                        <View
+                            android:id="@+id/v_char_comp_speed_div"
+                            android:layout_width="2dp"
+                            android:layout_height="12dp"
+                            android:background="@color/blue_text"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/pb_char1_comp_speed_progress"
+                            app:layout_constraintEnd_toStartOf="@id/pb_char2_comp_speed_progress"/>
+
+                        <ProgressBar
+                            android:id="@+id/pb_char2_comp_speed_progress"
+                            xmlns:tools="http://schemas.android.com/tools"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="0dp"
+                            android:layout_height="8dp"
+                            android:scaleX="-1"
+                            android:layout_marginEnd="@dimen/default_margin"
+                            android:progressDrawable="@drawable/pb_compare_stats2"
+                            tools:progress="60"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/v_char_comp_speed_div"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginTop="@dimen/large_margin"
+                        android:src="@drawable/ic_damage"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Damage"
+                        android:layout_marginTop="@dimen/small_margin"
+                        android:layout_gravity="center_horizontal"
+                        style="@style/text_stat_white" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/small_margin">
+                        <ProgressBar
+                            android:id="@+id/pb_char1_comp_damage_progress"
+                            xmlns:tools="http://schemas.android.com/tools"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="0dp"
+                            android:layout_height="8dp"
+                            android:progressDrawable="@drawable/pb_compare_stats"
+                            android:layout_marginStart="@dimen/default_margin"
+                            tools:progress="60"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/v_char_comp_damage_div"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
+                        <View
+                            android:id="@+id/v_char_comp_damage_div"
+                            android:layout_width="2dp"
+                            android:layout_height="12dp"
+                            android:background="@color/blue_text"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/pb_char1_comp_damage_progress"
+                            app:layout_constraintEnd_toStartOf="@id/pb_char2_comp_damage_progress"/>
+
+                        <ProgressBar
+                            android:id="@+id/pb_char2_comp_damage_progress"
+                            xmlns:tools="http://schemas.android.com/tools"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="0dp"
+                            android:layout_height="8dp"
+                            android:scaleX="-1"
+                            android:layout_marginEnd="@dimen/default_margin"
+                            android:progressDrawable="@drawable/pb_compare_stats2"
+                            tools:progress="60"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/v_char_comp_damage_div"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginTop="@dimen/large_margin"
+                        android:src="@drawable/ic_defense"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Defense"
+                        android:layout_marginTop="@dimen/small_margin"
+                        android:layout_gravity="center_horizontal"
+                        style="@style/text_stat_white" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/small_margin">
+                        <ProgressBar
+                            android:id="@+id/pb_char1_comp_defense_progress"
+                            xmlns:tools="http://schemas.android.com/tools"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="0dp"
+                            android:layout_height="8dp"
+                            android:progressDrawable="@drawable/pb_compare_stats"
+                            android:layout_marginStart="@dimen/default_margin"
+                            tools:progress="60"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/v_char_comp_defense_div"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
+                        <View
+                            android:id="@+id/v_char_comp_defense_div"
+                            android:layout_width="2dp"
+                            android:layout_height="12dp"
+                            android:background="@color/blue_text"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/pb_char1_comp_defense_progress"
+                            app:layout_constraintEnd_toStartOf="@id/pb_char2_comp_defense_progress"/>
+
+                        <ProgressBar
+                            android:id="@+id/pb_char2_comp_defense_progress"
+                            xmlns:tools="http://schemas.android.com/tools"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="0dp"
+                            android:layout_height="8dp"
+                            android:scaleX="-1"
+                            android:layout_marginEnd="@dimen/default_margin"
+                            android:progressDrawable="@drawable/pb_compare_stats2"
+                            tools:progress="60"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/v_char_comp_defense_div"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginTop="@dimen/large_margin"
+                        android:src="@drawable/ic_kill_power"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Kill Power"
+                        android:layout_marginTop="@dimen/small_margin"
+                        android:layout_gravity="center_horizontal"
+                        style="@style/text_stat_white" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/small_margin"
+                        android:layout_marginBottom="@dimen/large_margin">
+                        <ProgressBar
+                            android:id="@+id/pb_char1_comp_kill_power_progress"
+                            xmlns:tools="http://schemas.android.com/tools"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="0dp"
+                            android:layout_height="8dp"
+                            android:progressDrawable="@drawable/pb_compare_stats"
+                            android:layout_marginStart="@dimen/default_margin"
+                            tools:progress="60"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/v_char_comp_kill_power_div"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
+                        <View
+                            android:id="@+id/v_char_comp_kill_power_div"
+                            android:layout_width="2dp"
+                            android:layout_height="12dp"
+                            android:background="@color/blue_text"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/pb_char1_comp_kill_power_progress"
+                            app:layout_constraintEnd_toStartOf="@id/pb_char2_comp_kill_power_progress"/>
+
+                        <ProgressBar
+                            android:id="@+id/pb_char2_comp_kill_power_progress"
+                            xmlns:tools="http://schemas.android.com/tools"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="0dp"
+                            android:layout_height="8dp"
+                            android:scaleX="-1"
+                            android:layout_marginEnd="@dimen/default_margin"
+                            android:progressDrawable="@drawable/pb_compare_stats2"
+                            tools:progress="60"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/v_char_comp_kill_power_div"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
                 </LinearLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-            android:id="@+id/ll_character_compare_stats"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="@dimen/xlarge_margin"
-            app:layout_constraintTop_toBottomOf="@id/ll_character_compare_blobs">
-    
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_weight"
-                android:layout_gravity="center_horizontal"/>
-    
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Weight"
-                android:layout_marginTop="@dimen/small_margin"
-                android:layout_gravity="center_horizontal"
-                style="@style/text_stat_white" />
-    
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="@dimen/small_margin">
-                <ProgressBar
-                    android:id="@+id/pb_char1_comp_weight_progress"
-                    xmlns:tools="http://schemas.android.com/tools"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="0dp"
-                    android:layout_height="5dp"
-                    android:progressDrawable="@drawable/pb_compare_stats"
-                    android:layout_marginStart="@dimen/default_margin"
-                    tools:progress="60"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/v_char_comp_weight_div"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    />
-                <View
-                    android:id="@+id/v_char_comp_weight_div"
-                    android:layout_width="2dp"
-                    android:layout_height="12dp"
-                    android:background="@color/blue_text"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/pb_char1_comp_weight_progress"
-                    app:layout_constraintEnd_toStartOf="@id/pb_char2_comp_weight_progress"/>
-    
-                <ProgressBar
-                    android:id="@+id/pb_char2_comp_weight_progress"
-                    xmlns:tools="http://schemas.android.com/tools"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="0dp"
-                    android:layout_height="5dp"
-                    android:scaleX="-1"
-                    android:layout_marginEnd="@dimen/default_margin"
-                    android:progressDrawable="@drawable/pb_compare_stats"
-                    tools:progress="60"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/v_char_comp_weight_div"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    />
             </androidx.constraintlayout.widget.ConstraintLayout>
-    
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginTop="@dimen/large_margin"
-                android:src="@drawable/ic_speed"
-                android:layout_gravity="center_horizontal"/>
-    
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Speed"
-                android:layout_marginTop="@dimen/small_margin"
-                android:layout_gravity="center_horizontal"
-                style="@style/text_stat_white" />
-    
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="@dimen/small_margin">
-                <ProgressBar
-                    android:id="@+id/pb_char1_comp_speed_progress"
-                    xmlns:tools="http://schemas.android.com/tools"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="0dp"
-                    android:layout_height="5dp"
-                    android:progressDrawable="@drawable/pb_compare_stats"
-                    android:layout_marginStart="@dimen/default_margin"
-                    tools:progress="60"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/v_char_comp_speed_div"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    />
-                <View
-                    android:id="@+id/v_char_comp_speed_div"
-                    android:layout_width="2dp"
-                    android:layout_height="12dp"
-                    android:background="@color/blue_text"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/pb_char1_comp_speed_progress"
-                    app:layout_constraintEnd_toStartOf="@id/pb_char2_comp_speed_progress"/>
-    
-                <ProgressBar
-                    android:id="@+id/pb_char2_comp_speed_progress"
-                    xmlns:tools="http://schemas.android.com/tools"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="0dp"
-                    android:layout_height="5dp"
-                    android:scaleX="-1"
-                    android:layout_marginEnd="@dimen/default_margin"
-                    android:progressDrawable="@drawable/pb_compare_stats"
-                    tools:progress="60"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/v_char_comp_speed_div"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-    
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginTop="@dimen/large_margin"
-                android:src="@drawable/ic_damage"
-                android:layout_gravity="center_horizontal"/>
-    
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Damage"
-                android:layout_marginTop="@dimen/small_margin"
-                android:layout_gravity="center_horizontal"
-                style="@style/text_stat_white" />
-    
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="@dimen/small_margin">
-                <ProgressBar
-                    android:id="@+id/pb_char1_comp_damage_progress"
-                    xmlns:tools="http://schemas.android.com/tools"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="0dp"
-                    android:layout_height="5dp"
-                    android:progressDrawable="@drawable/pb_compare_stats"
-                    android:layout_marginStart="@dimen/default_margin"
-                    tools:progress="60"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/v_char_comp_damage_div"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    />
-                <View
-                    android:id="@+id/v_char_comp_damage_div"
-                    android:layout_width="2dp"
-                    android:layout_height="12dp"
-                    android:background="@color/blue_text"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/pb_char1_comp_damage_progress"
-                    app:layout_constraintEnd_toStartOf="@id/pb_char2_comp_damage_progress"/>
-    
-                <ProgressBar
-                    android:id="@+id/pb_char2_comp_damage_progress"
-                    xmlns:tools="http://schemas.android.com/tools"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="0dp"
-                    android:layout_height="5dp"
-                    android:scaleX="-1"
-                    android:layout_marginEnd="@dimen/default_margin"
-                    android:progressDrawable="@drawable/pb_compare_stats"
-                    tools:progress="60"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/v_char_comp_damage_div"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-    
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginTop="@dimen/large_margin"
-                android:src="@drawable/ic_defense"
-                android:layout_gravity="center_horizontal"/>
-    
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Defense"
-                android:layout_marginTop="@dimen/small_margin"
-                android:layout_gravity="center_horizontal"
-                style="@style/text_stat_white" />
-    
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="@dimen/small_margin">
-                <ProgressBar
-                    android:id="@+id/pb_char1_comp_defense_progress"
-                    xmlns:tools="http://schemas.android.com/tools"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="0dp"
-                    android:layout_height="5dp"
-                    android:progressDrawable="@drawable/pb_compare_stats"
-                    android:layout_marginStart="@dimen/default_margin"
-                    tools:progress="60"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/v_char_comp_defense_div"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    />
-                <View
-                    android:id="@+id/v_char_comp_defense_div"
-                    android:layout_width="2dp"
-                    android:layout_height="12dp"
-                    android:background="@color/blue_text"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/pb_char1_comp_defense_progress"
-                    app:layout_constraintEnd_toStartOf="@id/pb_char2_comp_defense_progress"/>
-    
-                <ProgressBar
-                    android:id="@+id/pb_char2_comp_defense_progress"
-                    xmlns:tools="http://schemas.android.com/tools"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="0dp"
-                    android:layout_height="5dp"
-                    android:scaleX="-1"
-                    android:layout_marginEnd="@dimen/default_margin"
-                    android:progressDrawable="@drawable/pb_compare_stats"
-                    tools:progress="60"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/v_char_comp_defense_div"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </LinearLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+            </FrameLayout>
+        </ScrollView>
 
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
