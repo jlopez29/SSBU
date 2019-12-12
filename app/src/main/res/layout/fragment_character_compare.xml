@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:id="@+id/cl_character_comp_container"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
@@ -86,7 +87,7 @@
                             android:scaleType="centerInside"
                             android:layout_width="0dp"
                             android:layout_height="0dp"
-                            android:scaleX="1.2"
+                            android:scaleX="1.1"
                             android:scaleY="1.2"
                             android:layout_alignTop="@+id/ll_char1_comp"
                             android:layout_alignBottom="@id/ll_char1_comp"
@@ -98,28 +99,34 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/xlarge_margin"
-                            android:src="@drawable/ic_doubutsu"
                             android:alpha=".2"/>
-                        <LinearLayout
+                        <RelativeLayout
                             android:id="@+id/ll_char1_comp"
+                            android:elevation="30dp"
+                            android:clipChildren="false"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:layout_height="wrap_content">
 
                             <ImageView
                                 android:id="@+id/iv_char1"
                                 android:layout_width="125dp"
                                 android:layout_height="125dp"
-                                android:scaleX="-1"
-                                android:src="@drawable/img_villager"/>
+                                android:scaleX="-1"/>
+                            <ImageView
+                                android:id="@+id/iv_char1_placeholder"
+                                android:layout_width="125dp"
+                                android:layout_height="125dp"
+                                android:visibility="invisible"
+                                android:scaleX="-1"/>
 
                             <TextView
                                 android:id="@+id/tv_char1_name"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Villager"
+                                android:text="Donkey Kong"
                                 android:layout_marginTop="@dimen/default_margin"
                                 android:layout_marginStart="@dimen/default_margin"
+                                android:layout_below="@id/iv_char1"
                                 style="@style/text_fighter_comp_white" />
 
                             <TextView
@@ -129,9 +136,10 @@
                                 android:text="Animal Crossing"
                                 android:layout_marginTop="@dimen/default_margin"
                                 android:layout_marginStart="@dimen/default_margin"
+                                android:layout_below="@id/tv_char1_name"
                                 style="@style/text_series_white" />
 
-                        </LinearLayout>
+                        </RelativeLayout>
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -144,7 +152,7 @@
                             android:scaleType="centerInside"
                             android:layout_width="0dp"
                             android:layout_height="0dp"
-                            android:scaleX="1.2"
+                            android:scaleX="1.1"
                             android:scaleY="1.2"
                             android:layout_alignTop="@+id/ll_char2_comp"
                             android:layout_alignBottom="@id/ll_char2_comp"
@@ -157,30 +165,38 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/xlarge_margin"
                             android:layout_alignParentEnd="true"
-                            android:src="@drawable/mii"
                             android:alpha=".2"/>
-                        <LinearLayout
+                        <RelativeLayout
                             android:id="@+id/ll_char2_comp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
+                            android:elevation="3dp"
+                            android:clipChildren="false"
                             android:orientation="vertical">
 
                             <ImageView
                                 android:id="@+id/iv_char2"
                                 android:layout_width="125dp"
                                 android:layout_height="125dp"
-                                android:layout_gravity="end"
-                                android:scaleX="-1"
-                                android:src="@drawable/img_jigglypuff"/>
+                                android:layout_alignParentEnd="true"
+                                android:scaleX="-1"/>
+                            <ImageView
+                                android:id="@+id/iv_char2_placeholder"
+                                android:layout_width="125dp"
+                                android:layout_height="125dp"
+                                android:layout_alignParentEnd="true"
+                                android:visibility="invisible"
+                                android:scaleX="-1"/>
                             <TextView
                                 android:id="@+id/tv_char2_name"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Jigglypuff"
-                                android:layout_gravity="end"
+                                android:layout_alignParentEnd="true"
                                 android:layout_marginTop="@dimen/default_margin"
                                 android:layout_marginEnd="@dimen/default_margin"
+                                android:layout_below="@id/iv_char2"
                                 style="@style/text_fighter_comp_white" />
 
                             <TextView
@@ -188,12 +204,13 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Pokemon"
-                                android:layout_gravity="end"
+                                android:layout_alignParentEnd="true"
                                 android:layout_marginTop="@dimen/default_margin"
                                 android:layout_marginEnd="@dimen/default_margin"
+                                android:layout_below="@id/tv_char2_name"
                                 style="@style/text_series_white" />
 
-                        </LinearLayout>
+                        </RelativeLayout>
                     </RelativeLayout>
 
 
@@ -235,7 +252,7 @@
                             android:layout_height="8dp"
                             android:progressDrawable="@drawable/pb_compare_stats"
                             android:layout_marginStart="@dimen/default_margin"
-                            tools:progress="60"
+                            android:max="10"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toStartOf="@id/v_char_comp_weight_div"
                             app:layout_constraintTop_toTopOf="parent"
@@ -260,7 +277,7 @@
                             android:scaleX="-1"
                             android:layout_marginEnd="@dimen/default_margin"
                             android:progressDrawable="@drawable/pb_compare_stats2"
-                            tools:progress="60"
+                            android:max="10"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@id/v_char_comp_weight_div"
                             app:layout_constraintTop_toTopOf="parent"
@@ -296,7 +313,7 @@
                             android:layout_height="8dp"
                             android:progressDrawable="@drawable/pb_compare_stats"
                             android:layout_marginStart="@dimen/default_margin"
-                            tools:progress="60"
+                            android:max="10"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toStartOf="@id/v_char_comp_speed_div"
                             app:layout_constraintTop_toTopOf="parent"
@@ -321,7 +338,7 @@
                             android:scaleX="-1"
                             android:layout_marginEnd="@dimen/default_margin"
                             android:progressDrawable="@drawable/pb_compare_stats2"
-                            tools:progress="60"
+                            android:max="10"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@id/v_char_comp_speed_div"
                             app:layout_constraintTop_toTopOf="parent"
@@ -357,7 +374,7 @@
                             android:layout_height="8dp"
                             android:progressDrawable="@drawable/pb_compare_stats"
                             android:layout_marginStart="@dimen/default_margin"
-                            tools:progress="60"
+                            android:max="10"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toStartOf="@id/v_char_comp_damage_div"
                             app:layout_constraintTop_toTopOf="parent"
@@ -382,7 +399,7 @@
                             android:scaleX="-1"
                             android:layout_marginEnd="@dimen/default_margin"
                             android:progressDrawable="@drawable/pb_compare_stats2"
-                            tools:progress="60"
+                            android:max="10"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@id/v_char_comp_damage_div"
                             app:layout_constraintTop_toTopOf="parent"
@@ -418,7 +435,7 @@
                             android:layout_height="8dp"
                             android:progressDrawable="@drawable/pb_compare_stats"
                             android:layout_marginStart="@dimen/default_margin"
-                            tools:progress="60"
+                            android:max="10"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toStartOf="@id/v_char_comp_defense_div"
                             app:layout_constraintTop_toTopOf="parent"

@@ -19,7 +19,7 @@
             android:fitsSystemWindows="true"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:theme="@style/AppTheme">
+            android:theme="@style/AppTheme">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/ctbl_character_stats"
@@ -27,7 +27,6 @@
                 android:layout_height="match_parent"
                 android:background="?attr/colorPrimary"
                 android:fitsSystemWindows="true"
-                app:title="Villager"
                 app:expandedTitleGravity="center|top"
                 app:expandedTitleTextAppearance="@style/collapsing_tb_expanded"
                 app:collapsedTitleGravity="center"
@@ -48,7 +47,6 @@
                     android:id="@+id/iv_character_image"
                     android:layout_width="200dp"
                     android:layout_height="200dp"
-                    android:src="@drawable/img_villager"
                     app:layout_collapseMode="parallax"
                     android:layout_gravity="center_horizontal|bottom" />
 
@@ -147,7 +145,6 @@
                                         android:id="@+id/iv_character_series_icon"
                                         android:layout_width="24dp"
                                         android:layout_height="24dp"
-                                        android:src="@drawable/ic_doubutsu"
                                         android:layout_alignTop="@id/tv_series_name"
                                         android:layout_alignBottom="@id/tv_series_name"/>
 
@@ -155,7 +152,6 @@
                                         android:id="@+id/tv_series_name"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="Animal Crossing"
                                         android:textColor="@color/white"
                                         android:fontFamily="@font/roboto_medium"
                                         android:layout_toEndOf="@id/iv_character_series_icon"/>
@@ -209,7 +205,7 @@
                             android:id="@+id/tv_character_description"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Super Smash Bros Ultimate Villager is from the Animal Crossing Series and ranks as a E Tier Pick (Below Average)."
+                            android:visibility="gone"
                             android:textColor="@color/white"
                             android:textSize="20sp"
                             android:fontFamily="@font/roboto_regular"
@@ -238,12 +234,12 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/ll_counters"
+                        android:id="@+id/ll_moves"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
                         <LinearLayout
-                            android:id="@+id/ll_character_counters"
+                            android:id="@+id/ll_character_moves"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/default_margin"
@@ -253,17 +249,17 @@
                             app:layout_constraintTop_toBottomOf="@id/cl_character_stat_overview"
                             app:layout_constraintStart_toStartOf="parent">
                             <ImageView
-                                android:id="@+id/iv_counters_pill"
+                                android:id="@+id/iv_moves_pill"
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
                                 android:layout_gravity="center_vertical"
                                 />
 
                             <TextView
-                                android:id="@+id/tv_counters"
+                                android:id="@+id/tv_moves"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Counter Matchups"
+                                android:text="Move Set"
                                 android:textColor="@color/white"
                                 android:textSize="20sp"
                                 android:fontFamily="@font/roboto_medium"
@@ -272,17 +268,16 @@
                         </LinearLayout>
 
                         <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/cl_character_counters"
+                            android:id="@+id/cl_character_moves"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:animateLayoutChanges="true"
-                            app:layout_constraintTop_toBottomOf="@id/ll_character_counters">
+                            app:layout_constraintTop_toBottomOf="@id/ll_character_moves">
 
                             <TextView
-                                android:id="@+id/tv_character_counters_description"
+                                android:id="@+id/tv_character_moves_description"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="The best character matchups for Villager, these are counter picks villager is weak against."
                                 android:textColor="@color/white"
                                 android:textSize="20sp"
                                 android:fontFamily="@font/roboto_regular"
@@ -295,19 +290,19 @@
                                 app:layout_constraintStart_toStartOf="parent"/>
 
                             <FrameLayout
-                                android:id="@+id/fl_character_counters"
+                                android:id="@+id/fl_character_moves"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:animateLayoutChanges="true"
-                                app:layout_constraintTop_toBottomOf="@id/tv_character_counters_description">
+                                app:layout_constraintTop_toBottomOf="@id/tv_character_moves_description">
                                 <androidx.recyclerview.widget.RecyclerView
-                                    android:id="@+id/rv_character_counters"
+                                    android:id="@+id/rv_character_moves"
                                     android:layout_gravity="center_horizontal"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:nestedScrollingEnabled="false"
                                     android:layoutAnimation="@anim/character_animation"
-                                    tools:listitem="@layout/item_character" />
+                                    tools:listitem="@layout/item_move" />
                             </FrameLayout>
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </LinearLayout>

@@ -39,7 +39,6 @@
                 android:id="@+id/iv_character_mark"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_doubutsu"
                 android:layout_marginEnd="@dimen/default_margin"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -62,13 +61,11 @@
                     android:id="@+id/tv_character_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Villager"
                     style="@style/text_fighter_cv_white"/>
                 <TextView
                     android:id="@+id/tv_character_tier"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="E Tier"
                     style="@style/text_tier_grey"/>
             </LinearLayout>
 
@@ -78,7 +75,6 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
 
-                android:src="@drawable/img_villager"
                 android:elevation="2dp"
                 android:outlineProvider="none"
                 app:layout_constraintVertical_weight=".75"

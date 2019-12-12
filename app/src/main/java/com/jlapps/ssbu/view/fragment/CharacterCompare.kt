@@ -18,7 +18,10 @@ import com.jlapps.ssbu.R
 import com.jlapps.ssbu.model.CharacterComparison
 import com.jlapps.ssbu.view.adapter.DefaultRecyclerAdapter
 import com.jlapps.ssbu.viewmodel.SmashViewModel
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_character_compare.*
+import kotlinx.android.synthetic.main.fragment_character_compare.view.*
+import kotlinx.android.synthetic.main.fragment_character_stats.*
 
 
 class CharacterCompare : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapterListener<Any>{
@@ -27,10 +30,12 @@ class CharacterCompare : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapt
 
     val TAG = "CharComp"
     lateinit var viewModel:SmashViewModel
+    lateinit var rootView:View
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         Log.e(TAG,"oCV")
-        return inflater.inflate(R.layout.fragment_character_compare,container,false)
+        rootView = inflater.inflate(R.layout.fragment_character_compare,container,false)
+        return rootView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -59,29 +64,47 @@ class CharacterCompare : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapt
     }
 
     fun initCharacterOne(){
-        TransitionManager.beginDelayedTransition(cl_char_compare_bottom_sheet)
-        pb_char1_comp_damage_progress.progress = CharacterComparison.char1.attributes.damage
-        pb_char1_comp_defense_progress.progress = CharacterComparison.char1.attributes.defense
-        pb_char1_comp_kill_power_progress.progress = CharacterComparison.char1.attributes.killPower
-        pb_char1_comp_speed_progress.progress = CharacterComparison.char1.attributes.speed
-        pb_char1_comp_weight_progress.progress = CharacterComparison.char1.attributes.weight
+        TransitionManager.beginDelayedTransition(rootView.cl_char_compare_bottom_sheet)
+        rootView.pb_char1_comp_damage_progress.progress = CharacterComparison.char1.attributes.damage
+        rootView.pb_char1_comp_defense_progress.progress = CharacterComparison.char1.attributes.defense
+        rootView.pb_char1_comp_kill_power_progress.progress = CharacterComparison.char1.attributes.killPower
+        rootView.pb_char1_comp_speed_progress.progress = CharacterComparison.char1.attributes.speed
+        rootView.pb_char1_comp_weight_progress.progress = CharacterComparison.char1.attributes.weight
 
-        iv_char1.setImageResource(CharacterComparison.char1.image)
-        tv_char1_name.text = CharacterComparison.char1.name
-        tv_char1_series.text = CharacterComparison.char1.series
+        var formatted_name = Character.formatName(CharacterComparison.char1.name)
+
+        var url = "https://storage.googleapis.com/ssbu-3d1bf.appspot.com/skins/${formatted_name}/${CharacterComparison.char1.skinDex}"
+        Picasso.get()
+                .load(url).resize(800, 0).centerInside()
+                .into(rootView.iv_char1)
+        Picasso.get()
+                .load(url).resize(800, 0).centerInside()
+                .into(rootView.iv_char1_placeholder)
+        rootView.iv_char1.setOnClickListener {Character.transitionSkinView(rootView.context,CharacterComparison.char1,rootView.iv_char1)}
+        rootView.tv_char1_name.text = CharacterComparison.char1.name
+        rootView.tv_char1_series.text = CharacterComparison.char1.series
     }
     fun initCharacterTwo(){
-        TransitionManager.beginDelayedTransition(cl_char_compare_bottom_sheet)
-        pb_char2_comp_damage_progress.progress = CharacterComparison.char2.attributes.damage
-        pb_char2_comp_defense_progress.progress = CharacterComparison.char2.attributes.defense
-        pb_char2_comp_kill_power_progress.progress = CharacterComparison.char2.attributes.killPower
-        pb_char2_comp_speed_progress.progress = CharacterComparison.char2.attributes.speed
-        pb_char2_comp_weight_progress.progress = CharacterComparison.char2.attributes.weight
+        TransitionManager.beginDelayedTransition(rootView.cl_char_compare_bottom_sheet)
+        rootView.pb_char2_comp_damage_progress.progress = CharacterComparison.char2.attributes.damage
+        rootView.pb_char2_comp_defense_progress.progress = CharacterComparison.char2.attributes.defense
+        rootView.pb_char2_comp_kill_power_progress.progress = CharacterComparison.char2.attributes.killPower
+        rootView.pb_char2_comp_speed_progress.progress = CharacterComparison.char2.attributes.speed
+        rootView.pb_char2_comp_weight_progress.progress = CharacterComparison.char2.attributes.weight
 
 
-        iv_char2.setImageResource(CharacterComparison.char2.image)
-        tv_char2_name.text = CharacterComparison.char2.name
-        tv_char2_series.text = CharacterComparison.char2.series
+        var formatted_name = Character.formatName(CharacterComparison.char2.name)
+
+        var url = "https://storage.googleapis.com/ssbu-3d1bf.appspot.com/skins/${formatted_name}/${CharacterComparison.char2.skinDex}"
+        Picasso.get()
+                .load(url).resize(800, 0).centerInside()
+                .into(rootView.iv_char2)
+        Picasso.get()
+                .load(url).resize(800, 0).centerInside()
+                .into(rootView.iv_char2_placeholder)
+        rootView.iv_char2.setOnClickListener {Character.transitionSkinView(rootView.context,CharacterComparison.char2,rootView.iv_char2)}
+        rootView.tv_char2_name.text = CharacterComparison.char2.name
+        rootView.tv_char2_series.text = CharacterComparison.char2.series
     }
 
     fun initBottomSheet(){
@@ -103,6 +126,7 @@ class CharacterCompare : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapt
     fun initLiveData(){
         viewModel.isCharacter1.observe(activity as FragmentActivity, Observer { isChar1 ->
             if(isChar1 != null) {
+
                 if(isChar1)
                     initCharacterOne()
                 else

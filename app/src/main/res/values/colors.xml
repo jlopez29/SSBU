@@ -2,6 +2,7 @@
 <resources>
 
     <color name="primary">#323cbb</color>
+    <color name="primaryTransparent">#dd323cbb</color>
     <color name="primaryDark">#2e239d</color>
     <color name="accent">#669cf8</color>
 

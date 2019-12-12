@@ -7,10 +7,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -34,6 +35,10 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
     val TAG = "CharSelect"
     val animationDuration:Long = 435
     lateinit var viewModel: SmashViewModel
+//    var characters = ArrayList<Character>()
+    lateinit var adapter:DefaultRecyclerAdapter<Character>
+    lateinit var recycler:RecyclerView
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_character_selection,container,false)
@@ -45,10 +50,14 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
         viewModel= ViewModelProviders.of(activity!!).get(SmashViewModel::class.java)
         (activity as AppCompatActivity).setSupportActionBar(tb_char_selection)
 
+        initLiveData()
 
-        rv_characters.layoutManager = LinearLayoutManager(context)
-        rv_characters.adapter = DefaultRecyclerAdapter(characters,
-            R.layout.item_character,this)
+        recycler = activity!!.findViewById(R.id.rv_characters)
+
+        recycler.layoutManager = LinearLayoutManager(context)
+        adapter = DefaultRecyclerAdapter(characters,
+                R.layout.item_character,this)
+        recycler.adapter = adapter
 
     }
 
@@ -103,21 +112,21 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
 
                 if(CharacterComparison.selectingChar1) {
 
-                    if(CharacterComparison.char2.id != -1 && CharacterComparison.char2.id == item.id) {
+                    if(CharacterComparison.char2.id.equals("-1") && CharacterComparison.char2.id == item.id) {
                         CharacterComparison.selectingChar1 = false
                         setSelection(viewHolder, item, position, false)
                     }
-                    else if(CharacterComparison.char1.id != -1 && CharacterComparison.char1.id == item.id)
+                    else if(CharacterComparison.char1.id.equals("-1") && CharacterComparison.char1.id == item.id)
                         setSelection(viewHolder,item,position,false)
                     else
                         setSelection(viewHolder,item,position,true)
                 }
                 else{
-                    if(CharacterComparison.char1.id != -1 && CharacterComparison.char1.id == item.id) {
+                    if(CharacterComparison.char1.id.equals("-1") && CharacterComparison.char1.id == item.id) {
                         CharacterComparison.selectingChar1 = true
                         setSelection(viewHolder, item, position, false)
                     }
-                    else if(CharacterComparison.char2.id != -1 && CharacterComparison.char2.id == item.id)
+                    else if(CharacterComparison.char2.id.equals("-1") && CharacterComparison.char2.id == item.id)
                         setSelection(viewHolder,item,position,false)
                     else
                         setSelection(viewHolder,item,position,true)
@@ -137,10 +146,16 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
             FragUtil.swapFragment(activity as AppCompatActivity,FragUtil.fragmentCharacterStats,true,args)
         }
 
+        var formatted_name = Character.formatName(item.name)
+
+        var url = "https://storage.googleapis.com/ssbu-3d1bf.appspot.com/skins/${formatted_name}/${item.skinDex}"
         Picasso.get()
-            .load(item.image).resize(800,0).centerInside()
-            .into(viewHolder.itemView.iv_character)
-        viewHolder.itemView.iv_character_mark.setImageResource(item.mark)
+                .load(url)
+                .resize(800, 0)
+                .centerInside()
+                .into(viewHolder.itemView.iv_character)
+
+//        viewHolder.itemView.iv_character_mark.setImageResource(item.mark)
 
     }
     override fun recyclerItemClicked(item: Character?, position: Int, viewHolder: RecyclerView.ViewHolder) {
@@ -156,8 +171,8 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
             if(CharacterComparison.selectingChar1) {
 //                Log.e(TAG,"Select 1")
                 CharacterComparison.char1.isSelected = false
-                if (CharacterComparison.char1.id != -1)
-                    removeBorder(CharacterComparison.char1.id)
+                if (!CharacterComparison.char1.id.equals("-1"))
+                    removeBorder(viewHolder.adapterPosition)
 
                 CharacterComparison.char1 = characters.get(position)
                 item.isSelected = true
@@ -167,7 +182,7 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
 
                 CharacterComparison.selectingChar1 = false
                 changeSelectionBackground(viewHolder, true)
-                if(CharacterComparison.char2.id != -1)
+                if(!CharacterComparison.char2.id.equals("-1"))
                     triggerCompareView(true)
                 
             }
@@ -175,15 +190,15 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
             {
 //                Log.e(TAG,"Select 2")
                 CharacterComparison.char2.isSelected = false
-                if(CharacterComparison.char2.id != -1)
-                    removeBorder(CharacterComparison.char2.id)
+                if(!CharacterComparison.char2.id.equals("-1"))
+                    removeBorder(viewHolder.adapterPosition)
                 CharacterComparison.char2 = characters.get(position)
                 CharacterComparison.selectingChar1 = true
                 item.isSelected = true
                 viewHolder.itemView.cv_character.strokeColor =
                     resources.getColor(R.color.blue_text,null)
                 changeSelectionBackground(viewHolder,true)
-                if(CharacterComparison.char1.id != -1)
+                if(!CharacterComparison.char1.id.equals("-1"))
                     triggerCompareView(false)
 
             }
@@ -193,7 +208,7 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
             if (CharacterComparison.selectingChar1) {
 //                Log.e(TAG,"Select 1")
                 activity?.actionBar?.subtitle = ""
-                removeBorder(CharacterComparison.char1.id)
+                removeBorder(viewHolder.adapterPosition)
                 CharacterComparison.char1 = Character()
                 item.isSelected = false
                 changeSelectionBackground(viewHolder, false)
@@ -202,7 +217,7 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
             else {
 //                Log.e(TAG,"Select 2")
                 activity?.actionBar?.subtitle = ""
-                removeBorder(CharacterComparison.char2.id)
+                removeBorder(viewHolder.adapterPosition)
                 CharacterComparison.char2 = Character()
                 item.isSelected = false
                 changeSelectionBackground(viewHolder, false)
@@ -227,9 +242,6 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
 
         view?.iv_character_select?.visibility = View.VISIBLE
         view?.iv_character_deselect?.visibility = View.INVISIBLE
-
-//        view?.iv_character_select?.visibility = View.VISIBLE
-//        view?.iv_character_deselect?.visibility = View.INVISIBLE
     }
 
     fun changeSelectionBackground(viewHolder: RecyclerView.ViewHolder,selected:Boolean){
@@ -246,7 +258,20 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
         Handler().postDelayed(r, animationDuration)
     }
 
+    fun initLiveData(){
+        viewModel.charactersUpdated.observe(activity as FragmentActivity, Observer { isUpdated ->
+            if(isUpdated != null) {
 
+                Log.e(TAG,"updated ${isUpdated} ${characters.size} ")
+                if(isUpdated) {
+                    recycler.adapter = DefaultRecyclerAdapter(characters,
+                            R.layout.item_character,this)
+                }
+                viewModel.loading.value = false
+                viewModel.charactersUpdated.value = null
+            }
+        })
+    }
 
 }
 
