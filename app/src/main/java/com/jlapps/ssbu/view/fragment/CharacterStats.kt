@@ -169,10 +169,10 @@ class CharacterStats : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapter
             viewHolder.itemView.tv_move_description.text = item.description
             if(item.videoUri != null && item.videoUri != "null" && item.videoUri != "") {
 
-                Log.e(TAG,"prepped")
+                viewHolder.itemView.vv_move.visibility = View.VISIBLE
                 viewHolder.itemView.vv_move.setVideoURI(Uri.parse(item.videoUri))
                 viewHolder.itemView.vv_move.setOnPreparedListener {
-                    viewHolder.itemView.vv_move.visibility = View.VISIBLE
+                    Log.e(TAG,"prepped")
                     viewHolder.itemView.vv_move.setMediaController(MediaController(requireContext()))
                     it.isLooping = true
                     it.start()
