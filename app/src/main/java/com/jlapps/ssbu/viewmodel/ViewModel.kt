@@ -10,6 +10,7 @@ class SmashViewModel : ViewModel(){
     val charactersUpdated = MutableLiveData<Boolean>()
     val isCharacter1 = MutableLiveData<Boolean>()
     val loading = MutableLiveData<Boolean>()
+    val poppedCompareView = MutableLiveData<Boolean>()
 
     fun setChar(one:Boolean){
         isCharacter1.value = one

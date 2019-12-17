@@ -17,7 +17,7 @@ object Characters {
     fun getChars(ctx: Context,updated:MutableLiveData<Boolean>){
 
 //        if(!::url.isInitialized)
-        var url = "https://j652rjey74.execute-api.us-east-1.amazonaws.com/dev/characters"
+        var url = "https://3032dmjb53.execute-api.us-east-1.amazonaws.com/dev/characters"
 
         API.getInstance(ctx).addToRequestQueue(object : StringRequest(
             Method.GET, url,
@@ -27,12 +27,6 @@ object Characters {
                 Log.e(TAG,"obj ")
 
                 CharacterList.characters = gson.fromJson(response, object : TypeToken<List<Character>>() {}.type)
-
-
-//                for(i in 0 until array.length()-1){
-//                    Log.e(TAG,"obj " + array[i])
-//                }
-
 
                 updated.value = true
             },

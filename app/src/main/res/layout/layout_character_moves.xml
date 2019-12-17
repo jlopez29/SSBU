@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/default_margin">
+
+    <LinearLayout
+        android:id="@+id/ll_moves"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/ll_character_moves"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/default_margin"
+            android:layout_marginEnd="@dimen/default_margin"
+            android:paddingTop="@dimen/tiny_margin"
+            android:paddingBottom="@dimen/tiny_margin">
+            <ImageView
+                android:id="@+id/iv_moves_pill"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center_vertical"
+                />
+
+            <TextView
+                android:id="@+id/tv_moves"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Move Set"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:fontFamily="@font/roboto_medium"
+                android:layout_marginStart="@dimen/default_margin"
+                />
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_character_moves"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            app:layout_constraintTop_toBottomOf="@id/ll_character_moves">
+
+            <FrameLayout
+                android:id="@+id/fl_character_moves"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_character_moves"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:nestedScrollingEnabled="false"
+                    android:layoutAnimation="@anim/character_animation"
+                    tools:listitem="@layout/item_move" />
+            </FrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
+</LinearLayout>

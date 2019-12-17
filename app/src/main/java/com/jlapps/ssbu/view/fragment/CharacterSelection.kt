@@ -35,7 +35,6 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
     val TAG = "CharSelect"
     val animationDuration:Long = 435
     lateinit var viewModel: SmashViewModel
-//    var characters = ArrayList<Character>()
     lateinit var adapter:DefaultRecyclerAdapter<Character>
     lateinit var recycler:RecyclerView
 
@@ -112,7 +111,7 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
 
                 if(CharacterComparison.selectingChar1) {
 
-                    if(CharacterComparison.char2.id.equals("-1") && CharacterComparison.char2.id == item.id) {
+                    if(!CharacterComparison.char2.id.equals("-1") && CharacterComparison.char2.id == item.id) {
                         CharacterComparison.selectingChar1 = false
                         setSelection(viewHolder, item, position, false)
                     }
@@ -122,7 +121,7 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
                         setSelection(viewHolder,item,position,true)
                 }
                 else{
-                    if(CharacterComparison.char1.id.equals("-1") && CharacterComparison.char1.id == item.id) {
+                    if(!CharacterComparison.char1.id.equals("-1") && CharacterComparison.char1.id == item.id) {
                         CharacterComparison.selectingChar1 = true
                         setSelection(viewHolder, item, position, false)
                     }
@@ -258,11 +257,19 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
         Handler().postDelayed(r, animationDuration)
     }
 
+    fun resetSelections(){
+        for(chararacter in characters)
+            chararacter.isSelected = false
+
+        CharacterComparison.char1 = Character()
+        CharacterComparison.char2 = Character()
+
+        recycler.adapter?.notifyDataSetChanged()
+    }
+
     fun initLiveData(){
         viewModel.charactersUpdated.observe(activity as FragmentActivity, Observer { isUpdated ->
             if(isUpdated != null) {
-
-                Log.e(TAG,"updated ${isUpdated} ${characters.size} ")
                 if(isUpdated) {
                     recycler.adapter = DefaultRecyclerAdapter(characters,
                             R.layout.item_character,this)
@@ -271,6 +278,16 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
                 viewModel.charactersUpdated.value = null
             }
         })
+        viewModel.poppedCompareView.observe(activity as FragmentActivity, Observer { popped ->
+            if(popped != null) {
+
+                if(popped)
+                    resetSelections()
+
+                viewModel.poppedCompareView.value = null
+            }
+        })
+
     }
 
 }

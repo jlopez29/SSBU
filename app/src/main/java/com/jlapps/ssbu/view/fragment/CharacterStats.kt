@@ -27,14 +27,17 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_character_stats.*
 import kotlinx.android.synthetic.main.item_character_stat.view.*
 import kotlinx.android.synthetic.main.item_move.view.*
+import kotlinx.android.synthetic.main.layout_character_moves.*
+import kotlinx.android.synthetic.main.layout_character_stats.*
+import kotlinx.android.synthetic.main.layout_character_traits.*
 
 
 class CharacterStats : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapterListener<Any>{
 
     private var moves : ArrayList<Move> = ArrayList()
-    lateinit var char:Character
+    lateinit var character:Character
 
-    val TAG = "CharStats"
+    val TAG = "CharacterStats"
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_character_stats,container,false)
@@ -44,73 +47,16 @@ class CharacterStats : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapter
         super.onActivityCreated(savedInstanceState)
 
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
+        (activity as AppCompatActivity).actionBar?.setHomeButtonEnabled(true)
+        (activity as AppCompatActivity).actionBar?.setDisplayShowHomeEnabled(true)
+        character = arguments?.get("char") as Character
+        ctbl_character_stats.title = character.name
 
-        char = arguments?.get("char") as Character
+        initCharacterImages()
 
-        ctbl_character_stats.title = char.name
-        var formatted_name = Character.formatName(char.name)
+        initLists()
 
-        Picasso.get()
-                .load("https://storage.googleapis.com/ssbu-3d1bf.appspot.com/skins/${formatted_name}/${char.skinDex}")
-                .resize(800, 0)
-                .centerInside()
-                .into(iv_character_image)
-
-        Log.e(TAG,"height ${iv_character_series_icon.height}")
-
-        Picasso.get()
-                .load("https://storage.googleapis.com/ssbu-3d1bf.appspot.com/emblems/${char.series.formatString()}.png")
-                .resize(0, 75)
-                .into(iv_character_series_icon)
-
-        rv_character_stats.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL,false)
-        rv_character_stats.adapter = DefaultRecyclerAdapter(char.attributes.getAttributes() as ArrayList<Any>,
-            R.layout.item_character_stat,this)
-
-        moves = char.moves
-
-        rv_character_moves.layoutManager = LinearLayoutManager(context)
-        rv_character_moves.adapter = DefaultRecyclerAdapter(moves as ArrayList<Any>,
-            R.layout.item_move,this)
-
-        iv_character_image.setOnClickListener { transitionSkinView(requireContext(),char,iv_character_image) }
-
-        iv_overview_pill.setImageDrawable(activity?.getDrawable(R.drawable.ic_minus_to_plus))
-        iv_moves_pill.setImageDrawable(activity?.getDrawable(R.drawable.ic_minus_to_plus))
-
-        iv_overview_pill.setOnClickListener {
-
-            if(cl_character_stat_overview.visibility == View.GONE) {
-                cl_character_stat_overview.visibility = View.VISIBLE
-                TransitionManager.beginDelayedTransition(cl_character_stat_container)
-                animateView(iv_overview_pill.context, R.anim.slide_down_from_top, cl_character_stat_overview){}
-                iv_overview_pill.setImageDrawable(activity?.getDrawable(R.drawable.ic_plus_to_minus))
-                (iv_overview_pill.drawable as AnimatedVectorDrawable).start()
-            }else {
-                TransitionManager.beginDelayedTransition(cl_character_stat_container)
-                animateView(iv_overview_pill.context, R.anim.slide_up_to_top, cl_character_stat_overview){cl_character_stat_overview.visibility = View.GONE }
-                iv_overview_pill.setImageDrawable(activity?.getDrawable(R.drawable.ic_minus_to_plus))
-                (iv_overview_pill.drawable as AnimatedVectorDrawable).start()
-            }
-
-        }
-
-        iv_moves_pill.setOnClickListener {
-
-            if(cl_character_moves.visibility == View.GONE) {
-                cl_character_moves.visibility = View.VISIBLE
-//                TransitionManager.beginDelayedTransition(cl_character_stat_container)
-                animateView(iv_moves_pill.context, R.anim.slide_down_from_top, cl_character_moves){rv_character_stats.isNestedScrollingEnabled = false}
-                iv_moves_pill.setImageDrawable(activity?.getDrawable(R.drawable.ic_plus_to_minus))
-                (iv_moves_pill.drawable as AnimatedVectorDrawable).start()
-            }else {
-//                TransitionManager.beginDelayedTransition(cl_character_stat_container)
-                animateView(iv_moves_pill.context, R.anim.slide_up_to_top, cl_character_moves){cl_character_moves.visibility = View.GONE }
-                iv_moves_pill.setImageDrawable(activity?.getDrawable(R.drawable.ic_minus_to_plus))
-                (iv_moves_pill.drawable as AnimatedVectorDrawable).start()
-            }
-
-        }
+        initDropdowns()
     }
 
     override fun bindItemToView(item: Any, position: Int, viewHolder: RecyclerView.ViewHolder) {
@@ -167,24 +113,126 @@ class CharacterStats : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapter
         }else if(item is Move){
             viewHolder.itemView.tv_move_name.text = item.move
             viewHolder.itemView.tv_move_description.text = item.description
-            if(item.videoUri != null && item.videoUri != "null" && item.videoUri != "") {
+            if(item.videoUri != "") {
 
                 viewHolder.itemView.vv_move.visibility = View.VISIBLE
                 viewHolder.itemView.vv_move.setVideoURI(Uri.parse(item.videoUri))
                 viewHolder.itemView.vv_move.setOnPreparedListener {
-                    Log.e(TAG,"prepped")
-                    viewHolder.itemView.vv_move.setMediaController(MediaController(requireContext()))
                     it.isLooping = true
                     it.start()
-                    viewHolder.itemView.vv_move.start()
                 }
             }
         }
 
     }
+
     override fun recyclerItemClicked(item: Any?, position: Int, viewHolder: RecyclerView.ViewHolder) {
         Log.e(TAG,"clicked $position")
     }
+
+    fun initCharacterImages(){
+        var formattedName = Character.formatName(character.name)
+
+        Picasso.get()
+                .load("https://storage.googleapis.com/ssbu-3d1bf.appspot.com/skins/${formattedName}/${character.skinDex}")
+                .resize(800, 0)
+                .centerInside()
+                .into(iv_character_image)
+
+        Picasso.get()
+                .load("https://storage.googleapis.com/ssbu-3d1bf.appspot.com/emblems/${character.series.formatString()}.png")
+                .resize(0, 75)
+                .into(iv_character_series_icon)
+
+        tv_character_tier.text = character.tier.toString()
+    }
+
+    fun initLists(){
+        rv_character_stats.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL,false)
+        rv_character_stats.adapter = DefaultRecyclerAdapter(character.attributes.getAttributes() as ArrayList<Any>,
+                R.layout.item_character_stat,this)
+
+        var stringBuilder = StringBuilder()
+
+        for (trait in character.traits.advantages)
+            stringBuilder.append("- ${trait}\n")
+
+        tv_character_trait_advantages.text = stringBuilder.toString()
+
+        stringBuilder = stringBuilder.clear()
+
+        for (trait in character.traits.disadvantages)
+            stringBuilder.append("- ${trait}\n")
+
+        tv_character_trait_disadvantages.text = stringBuilder.toString()
+
+        moves = character.moves.filter { m -> m.videoUri != "" } as ArrayList<Move>
+        moves.addAll(character.moves.filter { m -> m.videoUri == "" } as Collection<Move>)
+
+        rv_character_moves.layoutManager = LinearLayoutManager(context)
+        rv_character_moves.adapter = DefaultRecyclerAdapter(moves as ArrayList<Any>,
+                R.layout.item_move,this)
+    }
+
+    fun initDropdowns(){
+        iv_character_image.setOnClickListener { transitionSkinView(requireContext(),character,iv_character_image) }
+
+        iv_overview_pill.setImageDrawable(activity?.getDrawable(R.drawable.ic_minus_to_plus))
+        iv_traits_pill.setImageDrawable(activity?.getDrawable(R.drawable.ic_minus_to_plus))
+        iv_moves_pill.setImageDrawable(activity?.getDrawable(R.drawable.ic_minus_to_plus))
+
+        iv_overview_pill.setOnClickListener {
+
+            if(cl_character_stat_overview.visibility == View.GONE) {
+                cl_character_stat_overview.visibility = View.VISIBLE
+                TransitionManager.beginDelayedTransition(cl_character_stat_container)
+                animateView(iv_overview_pill.context, R.anim.slide_down_from_top, cl_character_stat_overview){}
+                iv_overview_pill.setImageDrawable(activity?.getDrawable(R.drawable.ic_plus_to_minus))
+                (iv_overview_pill.drawable as AnimatedVectorDrawable).start()
+            }else {
+                TransitionManager.beginDelayedTransition(cl_character_stat_container)
+                animateView(iv_overview_pill.context, R.anim.slide_up_to_top, cl_character_stat_overview){cl_character_stat_overview.visibility = View.GONE }
+                iv_overview_pill.setImageDrawable(activity?.getDrawable(R.drawable.ic_minus_to_plus))
+                (iv_overview_pill.drawable as AnimatedVectorDrawable).start()
+            }
+
+        }
+
+        iv_traits_pill.setOnClickListener {
+
+            if(ll_character_traits.visibility == View.GONE) {
+                ll_character_traits.visibility = View.VISIBLE
+//                TransitionManager.beginDelayedTransition(cl_character_stat_container)
+                animateView(iv_traits_pill.context, R.anim.slide_down_from_top, ll_character_traits){}
+                iv_traits_pill.setImageDrawable(activity?.getDrawable(R.drawable.ic_plus_to_minus))
+                (iv_traits_pill.drawable as AnimatedVectorDrawable).start()
+            }else {
+//                TransitionManager.beginDelayedTransition(cl_character_stat_container)
+                animateView(iv_traits_pill.context, R.anim.slide_up_to_top, ll_character_traits){ll_character_traits.visibility = View.GONE }
+                iv_traits_pill.setImageDrawable(activity?.getDrawable(R.drawable.ic_minus_to_plus))
+                (iv_traits_pill.drawable as AnimatedVectorDrawable).start()
+            }
+
+        }
+
+        iv_moves_pill.setOnClickListener {
+
+            if(cl_character_moves.visibility == View.GONE) {
+                cl_character_moves.visibility = View.VISIBLE
+//                TransitionManager.beginDelayedTransition(cl_character_stat_container)
+                animateView(iv_moves_pill.context, R.anim.slide_down_from_top, cl_character_moves){rv_character_stats.isNestedScrollingEnabled = false}
+                iv_moves_pill.setImageDrawable(activity?.getDrawable(R.drawable.ic_plus_to_minus))
+                (iv_moves_pill.drawable as AnimatedVectorDrawable).start()
+            }else {
+//                TransitionManager.beginDelayedTransition(cl_character_stat_container)
+                animateView(iv_moves_pill.context, R.anim.slide_up_to_top, cl_character_moves){cl_character_moves.visibility = View.GONE }
+                iv_moves_pill.setImageDrawable(activity?.getDrawable(R.drawable.ic_minus_to_plus))
+                (iv_moves_pill.drawable as AnimatedVectorDrawable).start()
+            }
+
+        }
+    }
+
 
 }
 

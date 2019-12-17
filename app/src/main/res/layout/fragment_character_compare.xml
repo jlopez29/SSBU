@@ -102,7 +102,6 @@
                             android:alpha=".2"/>
                         <RelativeLayout
                             android:id="@+id/ll_char1_comp"
-                            android:elevation="30dp"
                             android:clipChildren="false"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content">
@@ -110,22 +109,15 @@
                             <ImageView
                                 android:id="@+id/iv_char1"
                                 android:layout_width="125dp"
-                                android:layout_height="125dp"
-                                android:scaleX="-1"/>
-                            <ImageView
-                                android:id="@+id/iv_char1_placeholder"
-                                android:layout_width="125dp"
-                                android:layout_height="125dp"
-                                android:visibility="invisible"
-                                android:scaleX="-1"/>
+                                android:layout_height="125dp"/>
 
                             <TextView
                                 android:id="@+id/tv_char1_name"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Donkey Kong"
                                 android:layout_marginTop="@dimen/default_margin"
                                 android:layout_marginStart="@dimen/default_margin"
+                                android:maxEms="4"
                                 android:layout_below="@id/iv_char1"
                                 style="@style/text_fighter_comp_white" />
 
@@ -133,7 +125,6 @@
                                 android:id="@+id/tv_char1_series"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Animal Crossing"
                                 android:layout_marginTop="@dimen/default_margin"
                                 android:layout_marginStart="@dimen/default_margin"
                                 android:layout_below="@id/tv_char1_name"
@@ -171,7 +162,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
-                            android:elevation="3dp"
                             android:clipChildren="false"
                             android:orientation="vertical">
 
@@ -179,23 +169,15 @@
                                 android:id="@+id/iv_char2"
                                 android:layout_width="125dp"
                                 android:layout_height="125dp"
-                                android:layout_alignParentEnd="true"
-                                android:scaleX="-1"/>
-                            <ImageView
-                                android:id="@+id/iv_char2_placeholder"
-                                android:layout_width="125dp"
-                                android:layout_height="125dp"
-                                android:layout_alignParentEnd="true"
-                                android:visibility="invisible"
-                                android:scaleX="-1"/>
+                                android:layout_alignParentEnd="true"/>
                             <TextView
                                 android:id="@+id/tv_char2_name"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Jigglypuff"
                                 android:layout_alignParentEnd="true"
                                 android:layout_marginTop="@dimen/default_margin"
                                 android:layout_marginEnd="@dimen/default_margin"
+                                android:maxEms="4"
                                 android:layout_below="@id/iv_char2"
                                 style="@style/text_fighter_comp_white" />
 
@@ -203,7 +185,6 @@
                                 android:id="@+id/tv_char2_series"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Pokemon"
                                 android:layout_alignParentEnd="true"
                                 android:layout_marginTop="@dimen/default_margin"
                                 android:layout_marginEnd="@dimen/default_margin"
@@ -458,9 +439,9 @@
                             android:layout_width="0dp"
                             android:layout_height="8dp"
                             android:scaleX="-1"
+                            android:max="10"
                             android:layout_marginEnd="@dimen/default_margin"
                             android:progressDrawable="@drawable/pb_compare_stats2"
-                            tools:progress="60"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@id/v_char_comp_defense_div"
                             app:layout_constraintTop_toTopOf="parent"
@@ -498,7 +479,7 @@
                             android:layout_height="8dp"
                             android:progressDrawable="@drawable/pb_compare_stats"
                             android:layout_marginStart="@dimen/default_margin"
-                            tools:progress="60"
+                            android:max="10"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toStartOf="@id/v_char_comp_kill_power_div"
                             app:layout_constraintTop_toTopOf="parent"
@@ -523,7 +504,7 @@
                             android:scaleX="-1"
                             android:layout_marginEnd="@dimen/default_margin"
                             android:progressDrawable="@drawable/pb_compare_stats2"
-                            tools:progress="60"
+                            android:max="10"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@id/v_char_comp_kill_power_div"
                             app:layout_constraintTop_toTopOf="parent"

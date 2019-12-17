@@ -14,15 +14,17 @@ import java.io.Serializable
 import java.util.*
 import kotlin.collections.ArrayList
 
-class Character constructor(@SerializedName("_id") var id: String, var name: String, var series: String, var tier: Char, image:Int, mark:Int, skins:ArrayList<String>, var attributes: Attributes, @SerializedName("move_set") var moves: ArrayList<Move>, var traits: Traits) : Serializable{
-    constructor():this("-1","Unselected","Default",'Z',-1,-1,ArrayList<String>(), Attributes(0,0,0,0,0,0,0),ArrayList<Move>(),Traits())
-
-    var mark = mark
+class Character constructor(@SerializedName("_id") var id: String, var name: String, var series: String, var tier: Char,var faces: Char,var attributes: Attributes, @SerializedName("move_set") var moves: ArrayList<Move>, var traits: Traits) : Serializable{
+    constructor():this("-1","Unselected","Default",'Z','r', Attributes(0,0,0,0,0,0,0),ArrayList<Move>(),Traits())
 
     var skinDex = 0
 
     var isFavorite = false
     var isSelected = false
+
+    fun facesRight():Boolean{
+        return (faces == 'r')
+    }
 
     companion object{
         fun formatName(name:String):String{
@@ -67,7 +69,7 @@ class Character constructor(@SerializedName("_id") var id: String, var name: Str
                     }
 
                     override fun onAnimationEnd(animation: Animation?) {
-                        view.visibility = View.GONE
+                        view.visibility = View.INVISIBLE
                         onEnd()
                     }
 
@@ -86,7 +88,6 @@ class Character constructor(@SerializedName("_id") var id: String, var name: Str
                 var formatted_name = formatName(char.name)
 
                 var url = "https://storage.googleapis.com/ssbu-3d1bf.appspot.com/skins/${formatted_name}/${char.skinDex}"
-                Log.e("Char", "index ${char.skinDex}")
                 Picasso.get()
                         .load(url).resize(800, 0).centerInside()
                         .into(view as ImageView)

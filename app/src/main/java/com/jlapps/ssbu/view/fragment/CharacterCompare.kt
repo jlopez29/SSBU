@@ -16,32 +16,34 @@ import com.jlapps.ssbu.model.Character
 
 import com.jlapps.ssbu.R
 import com.jlapps.ssbu.model.CharacterComparison
+import com.jlapps.ssbu.util.FragUtil
 import com.jlapps.ssbu.view.adapter.DefaultRecyclerAdapter
 import com.jlapps.ssbu.viewmodel.SmashViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_character_compare.*
 import kotlinx.android.synthetic.main.fragment_character_compare.view.*
 import kotlinx.android.synthetic.main.fragment_character_stats.*
+import java.lang.Exception
 
 
 class CharacterCompare : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapterListener<Any>{
-
-    private var characters : ArrayList<Character> = ArrayList()
-
     val TAG = "CharComp"
+
     lateinit var viewModel:SmashViewModel
     lateinit var rootView:View
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Log.e(TAG,"oCV")
         rootView = inflater.inflate(R.layout.fragment_character_compare,container,false)
         return rootView
     }
 
+    override fun onDestroyView() {
+        viewModel.poppedCompareView.value = true
+        super.onDestroyView()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.e(TAG,"oVC")
-
         viewModel = ViewModelProviders.of(activity!!).get(SmashViewModel::class.java)
 
         initCharacters()
@@ -74,12 +76,15 @@ class CharacterCompare : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapt
         var formatted_name = Character.formatName(CharacterComparison.char1.name)
 
         var url = "https://storage.googleapis.com/ssbu-3d1bf.appspot.com/skins/${formatted_name}/${CharacterComparison.char1.skinDex}"
+
+        if(!CharacterComparison.char1.facesRight() && rootView.iv_char1.scaleX != -1f)
+            rootView.iv_char1.scaleX = -1f
+        else if(CharacterComparison.char1.facesRight() && rootView.iv_char1.scaleX == -1f)
+            rootView.iv_char1.scaleX = 1f
+
         Picasso.get()
                 .load(url).resize(800, 0).centerInside()
                 .into(rootView.iv_char1)
-        Picasso.get()
-                .load(url).resize(800, 0).centerInside()
-                .into(rootView.iv_char1_placeholder)
         rootView.iv_char1.setOnClickListener {Character.transitionSkinView(rootView.context,CharacterComparison.char1,rootView.iv_char1)}
         rootView.tv_char1_name.text = CharacterComparison.char1.name
         rootView.tv_char1_series.text = CharacterComparison.char1.series
@@ -95,13 +100,16 @@ class CharacterCompare : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapt
 
         var formatted_name = Character.formatName(CharacterComparison.char2.name)
 
+        if(CharacterComparison.char2.facesRight() && rootView.iv_char2.scaleX != -1f)
+            rootView.iv_char2.scaleX = -1f
+
+        else if(!CharacterComparison.char2.facesRight() && rootView.iv_char2.scaleX == -1f)
+            rootView.iv_char2.scaleX = 1f
+
         var url = "https://storage.googleapis.com/ssbu-3d1bf.appspot.com/skins/${formatted_name}/${CharacterComparison.char2.skinDex}"
         Picasso.get()
                 .load(url).resize(800, 0).centerInside()
                 .into(rootView.iv_char2)
-        Picasso.get()
-                .load(url).resize(800, 0).centerInside()
-                .into(rootView.iv_char2_placeholder)
         rootView.iv_char2.setOnClickListener {Character.transitionSkinView(rootView.context,CharacterComparison.char2,rootView.iv_char2)}
         rootView.tv_char2_name.text = CharacterComparison.char2.name
         rootView.tv_char2_series.text = CharacterComparison.char2.series
@@ -131,8 +139,11 @@ class CharacterCompare : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapt
                     initCharacterOne()
                 else
                     initCharacterTwo()
+
+                viewModel.isCharacter1.value = null
             }
         })
+
     }
 
 }
