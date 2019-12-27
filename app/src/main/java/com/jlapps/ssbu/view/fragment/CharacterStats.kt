@@ -68,14 +68,14 @@ class CharacterStats : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapter
     }
 
     fun initselectWheel(){
-        var viewGroup = activity?.findViewById<ViewGroup>(R.id.fl_select_wheel)
 
-        selectWheelContainer = LayoutInflater.from(context).inflate(R.layout.custom_select_wheel,viewGroup)
+        var view = LayoutInflater.from(context).inflate(R.layout.custom_select_wheel,null)
+        var selectWheelContainer = view.findViewById<View>(R.id.fl_select_wheel)
         var selectWheel = selectWheelContainer.findViewById<SelectWheel>(R.id.select_wheel)
 
-        cl_stat_container.addView(selectWheel)
         selectWheel.visibility = View.INVISIBLE
-        selectWheel.amount = 8
+        cl_stat_container.addView(selectWheelContainer)
+//        selectWheel.amount = 8
 
         iv_character_image.setOnTouchListener{_,e ->
             if (e.action == MotionEvent.ACTION_DOWN) {
@@ -106,8 +106,8 @@ class CharacterStats : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapter
             Log.e(TAG,"Long click")
 
             if(selectWheel.visibility == View.INVISIBLE){
-                selectWheel.x = lastKnownX
-                selectWheel.y = lastKnownY
+                selectWheelContainer.x = lastKnownX
+                selectWheelContainer.y = lastKnownY
                 disableScroll()
                 circularRevealView(selectWheel)
             }

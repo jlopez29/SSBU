@@ -5,7 +5,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-        <com.jlapps.ssbu.view.custom.KotlinView
+        <com.jlapps.ssbu.view.custom.SelectWheel
             android:id="@+id/select_wheel"
             android:layout_width="200dp"
             android:layout_height="200dp" />

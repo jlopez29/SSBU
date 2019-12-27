@@ -16,29 +16,30 @@ class SelectWheel @JvmOverloads constructor(context: Context, attrs: AttributeSe
 
     private var radius = 0f
 
-    private var slices: MutableList<Color> = mutableListOf()
+    private var slices: List<Color> = listOf(Color.RED,Color.ORANGE,Color.RED,Color.ORANGE,Color.RED,Color.ORANGE,Color.RED,Color.ORANGE)
     set(value) {
         if (field != value || arcs.isEmpty()) {
             field = value
             computeArcs()
         }
     }
-    var amount: Int = 0
-        get() = 0
-        set(value){
-            field = value
-            initSlices()
-            computeArcs()
-        }
-
-    fun initSlices(){
-        for(i in 0..amount){
-            if(i % 2 == 0)
-                slices.add(Color.ORANGE)
-            else
-                slices.add(Color.RED)
-        }
-    }
+//    var amount: Int = 0
+//        get() = 0
+//        set(value){
+//            field = value
+//            initSlices()
+//            computeArcs()
+//            invalidate()
+//        }
+//
+//    fun initSlices(){
+//        for(i in 0..amount){
+//            if(i % 2 == 0)
+//                slices.add(Color.ORANGE)
+//            else
+//                slices.add(Color.RED)
+//        }
+//    }
 
 
     private var arcs = emptyList<Arc>()

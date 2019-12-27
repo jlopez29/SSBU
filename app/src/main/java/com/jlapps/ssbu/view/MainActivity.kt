@@ -8,7 +8,9 @@ import androidx.lifecycle.ViewModelProviders
 import com.jlapps.ssbu.R
 import com.jlapps.ssbu.util.AnimUtil.fadeView
 import com.jlapps.ssbu.util.FragUtil
+import com.jlapps.ssbu.view.custom.SelectWheel
 import com.jlapps.ssbu.viewmodel.SmashViewModel
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.loading.*
 
 
