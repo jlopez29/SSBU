@@ -3,26 +3,31 @@ package com.jlapps.ssbu.view.fragment
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
 import android.transition.TransitionManager
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
-import android.widget.MediaController
-import android.widget.VideoView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
+import com.google.android.material.appbar.AppBarLayout
 import com.jlapps.ssbu.R
-import com.jlapps.ssbu.model.*
+import com.jlapps.ssbu.model.Attributes
+import com.jlapps.ssbu.model.Character
 import com.jlapps.ssbu.model.Character.Companion.transitionSkinView
+import com.jlapps.ssbu.model.Move
+import com.jlapps.ssbu.model.formatString
 import com.jlapps.ssbu.util.AnimUtil.animateView
 import com.jlapps.ssbu.view.adapter.DefaultRecyclerAdapter
+import com.jlapps.ssbu.view.custom.SelectWheel
+import com.jlapps.ssbu.view.custom.SelectWheel.Companion.lastKnownX
+import com.jlapps.ssbu.view.custom.SelectWheel.Companion.lastKnownY
+import com.jlapps.ssbu.view.custom.SelectWheel.Companion.lastSelected
+import com.jlapps.ssbu.view.custom.circularHideView
+import com.jlapps.ssbu.view.custom.circularRevealView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_character_stats.*
 import kotlinx.android.synthetic.main.item_character_stat.view.*
@@ -36,6 +41,7 @@ class CharacterStats : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapter
 
     private var moves : ArrayList<Move> = ArrayList()
     lateinit var character:Character
+    lateinit var selectWheelContainer:View
 
     val TAG = "CharacterStats"
 
@@ -57,6 +63,72 @@ class CharacterStats : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapter
         initLists()
 
         initDropdowns()
+
+        initselectWheel()
+    }
+
+    fun initselectWheel(){
+        var viewGroup = activity?.findViewById<ViewGroup>(R.id.fl_select_wheel)
+
+        selectWheelContainer = LayoutInflater.from(context).inflate(R.layout.custom_select_wheel,viewGroup)
+        var selectWheel = selectWheelContainer.findViewById<SelectWheel>(R.id.select_wheel)
+
+        cl_stat_container.addView(selectWheel)
+        selectWheel.visibility = View.INVISIBLE
+        selectWheel.amount = 8
+
+        iv_character_image.setOnTouchListener{_,e ->
+            if (e.action == MotionEvent.ACTION_DOWN) {
+                lastKnownX = e.x
+                lastKnownY = e.y
+            } else if (e.action == MotionEvent.ACTION_UP && selectWheel.visibility == View.VISIBLE) {
+                circularHideView(selectWheel)
+                enableScroll()
+                selectWheel.isSelecting = false
+                selectWheel.resetSelection()
+                character.skinDex = lastSelected-1
+                transitionSkinView(requireContext(),character,iv_character_image)
+            }
+            else if(e.action == MotionEvent.ACTION_MOVE) {
+                if(!selectWheel.isSelecting) {
+                    selectWheel.isSelecting = true
+                }else{
+                    var newX = e.x
+                    var newY = e.y
+                    lastSelected = selectWheel.findAreaTouched(newX,newY)
+                }
+            }
+
+            false
+        }
+
+        iv_character_image.setOnLongClickListener {
+            Log.e(TAG,"Long click")
+
+            if(selectWheel.visibility == View.INVISIBLE){
+                selectWheel.x = lastKnownX
+                selectWheel.y = lastKnownY
+                disableScroll()
+                circularRevealView(selectWheel)
+            }
+            false
+        }
+    }
+    private fun enableScroll() {
+        val params = ctbl_character_stats.getLayoutParams() as AppBarLayout.LayoutParams
+        params.scrollFlags = (
+                AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
+                        or AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED
+                )
+        ctbl_character_stats.setLayoutParams(params)
+        ctbl_character_stats.requestDisallowInterceptTouchEvent(false)
+    }
+
+    private fun disableScroll() {
+        val params = ctbl_character_stats.getLayoutParams() as AppBarLayout.LayoutParams
+        params.scrollFlags = 0
+        ctbl_character_stats.setLayoutParams(params)
+        ctbl_character_stats.requestDisallowInterceptTouchEvent(true)
     }
 
     override fun bindItemToView(item: Any, position: Int, viewHolder: RecyclerView.ViewHolder) {
@@ -175,7 +247,7 @@ class CharacterStats : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapter
     }
 
     fun initDropdowns(){
-        iv_character_image.setOnClickListener { transitionSkinView(requireContext(),character,iv_character_image) }
+//        iv_character_image.setOnClickListener { transitionSkinView(requireContext(),character,iv_character_image) }
 
         iv_overview_pill.setImageDrawable(activity?.getDrawable(R.drawable.ic_minus_to_plus))
         iv_traits_pill.setImageDrawable(activity?.getDrawable(R.drawable.ic_minus_to_plus))

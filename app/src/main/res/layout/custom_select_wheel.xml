@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    android:id="@+id/fl_select_wheel"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+        <com.jlapps.ssbu.view.custom.KotlinView
+            android:id="@+id/select_wheel"
+            android:layout_width="200dp"
+            android:layout_height="200dp" />
+
+</FrameLayout>
