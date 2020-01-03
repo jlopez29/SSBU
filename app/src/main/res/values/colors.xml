@@ -35,4 +35,9 @@
     <color name="blue_dark">#2f34b3</color>
     <color name="blue_dark2">#25249c</color>
     <color name="blue_text">#5a92f1</color>
+
+
+    <color name="blue_light_select_wheel">#cc2f34b3</color>
+    <color name="blue_dark_select_wheel">#cc25249c</color>
+    <color name="orange_light_select_wheel">#ccfd9b51</color>
 </resources>

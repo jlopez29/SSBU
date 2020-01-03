@@ -1,6 +1,7 @@
 package com.jlapps.ssbu.model
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.util.Log
 import android.view.View
 import android.view.animation.Animation
@@ -9,6 +10,7 @@ import android.widget.ImageView
 import com.google.gson.annotations.SerializedName
 import com.jlapps.ssbu.R
 import com.squareup.picasso.Picasso
+import com.squareup.picasso.Target
 import kotlinx.android.synthetic.main.fragment_character_stats.*
 import java.io.Serializable
 import java.util.*
@@ -84,6 +86,44 @@ class Character constructor(@SerializedName("_id") var id: String, var name: Str
             fadeViewSlow(ctx, false, view) {
 
                 if (char.skinDex < 7) char.skinDex++ else char.skinDex = 0
+
+                var formatted_name = formatName(char.name)
+
+                var url = "https://storage.googleapis.com/ssbu-3d1bf.appspot.com/skins/${formatted_name}/${char.skinDex}"
+                Picasso.get()
+                        .load(url).resize(800, 0).centerInside()
+                        .into(view as ImageView)
+
+                fadeViewSlow(ctx, true, view) {}
+            }
+        }
+
+        fun getSkin(char:Character,index:Int,target:Target,width:Int){
+            var formatted_name = formatName(char.name)
+            var url = "https://storage.googleapis.com/ssbu-3d1bf.appspot.com/skins/${formatted_name}/${index}"
+            Picasso.get()
+                    .load(url).resize(width, 0).centerInside()
+                    .into(target)
+        }
+        fun transitionToSkinView(ctx:Context,char:Character,view: View,index:Int,fadeout:Boolean) {
+
+            if(fadeout) {
+                fadeViewSlow(ctx, false, view) {
+
+                    char.skinDex = index
+
+                    var formatted_name = formatName(char.name)
+
+                    var url = "https://storage.googleapis.com/ssbu-3d1bf.appspot.com/skins/${formatted_name}/${char.skinDex}"
+                    Picasso.get()
+                            .load(url).resize(800, 0).centerInside()
+                            .into(view as ImageView)
+
+                    fadeViewSlow(ctx, true, view) {}
+                }
+            }else
+            {
+                char.skinDex = index
 
                 var formatted_name = formatName(char.name)
 

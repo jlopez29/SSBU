@@ -17,7 +17,9 @@ import com.google.android.material.appbar.AppBarLayout
 import com.jlapps.ssbu.R
 import com.jlapps.ssbu.model.Attributes
 import com.jlapps.ssbu.model.Character
+import com.jlapps.ssbu.model.Character.Companion.fadeViewSlow
 import com.jlapps.ssbu.model.Character.Companion.transitionSkinView
+import com.jlapps.ssbu.model.Character.Companion.transitionToSkinView
 import com.jlapps.ssbu.model.Move
 import com.jlapps.ssbu.model.formatString
 import com.jlapps.ssbu.util.AnimUtil.animateView
@@ -74,20 +76,26 @@ class CharacterStats : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapter
         var selectWheel = selectWheelContainer.findViewById<SelectWheel>(R.id.select_wheel)
 
         selectWheel.visibility = View.INVISIBLE
+        selectWheel.character = character
         cl_stat_container.addView(selectWheelContainer)
 //        selectWheel.amount = 8
 
         iv_character_image.setOnTouchListener{_,e ->
+            Log.e(TAG,"action ${e.action}")
             if (e.action == MotionEvent.ACTION_DOWN) {
                 lastKnownX = e.x
                 lastKnownY = e.y
-            } else if (e.action == MotionEvent.ACTION_UP && selectWheel.visibility == View.VISIBLE) {
+                fadeViewSlow(requireContext(),false,iv_character_image){}
+            } else if (e.action == MotionEvent.ACTION_UP) {
                 circularHideView(selectWheel)
                 enableScroll()
                 selectWheel.isSelecting = false
                 selectWheel.resetSelection()
-                character.skinDex = lastSelected-1
-                transitionSkinView(requireContext(),character,iv_character_image)
+
+                if(lastSelected == -1)
+                    fadeViewSlow(requireContext(),true,iv_character_image){}
+                else
+                    transitionToSkinView(requireContext(),character,iv_character_image, lastSelected,false)
             }
             else if(e.action == MotionEvent.ACTION_MOVE) {
                 if(!selectWheel.isSelecting) {
@@ -95,8 +103,13 @@ class CharacterStats : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapter
                 }else{
                     var newX = e.x
                     var newY = e.y
-                    lastSelected = selectWheel.findAreaTouched(newX,newY)
+//                    if(selectWheel.findAreaTouched(newX,newY) != lastSelected) {
+                        lastSelected = selectWheel.findAreaTouched(newX, newY)
+//                        transitionToSkinView(requireContext(),character,iv_character_image, lastSelected)
+//                    }
                 }
+            }else if(e.action == MotionEvent.ACTION_CANCEL){
+                fadeViewSlow(requireContext(),true,iv_character_image){}
             }
 
             false
