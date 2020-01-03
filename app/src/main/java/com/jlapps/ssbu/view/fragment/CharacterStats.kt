@@ -17,12 +17,12 @@ import com.google.android.material.appbar.AppBarLayout
 import com.jlapps.ssbu.R
 import com.jlapps.ssbu.model.Attributes
 import com.jlapps.ssbu.model.Character
-import com.jlapps.ssbu.model.Character.Companion.fadeViewSlow
-import com.jlapps.ssbu.model.Character.Companion.transitionSkinView
-import com.jlapps.ssbu.model.Character.Companion.transitionToSkinView
 import com.jlapps.ssbu.model.Move
 import com.jlapps.ssbu.model.formatString
 import com.jlapps.ssbu.util.AnimUtil.animateView
+import com.jlapps.ssbu.util.ViewUtils.fadeViewSlow
+import com.jlapps.ssbu.util.ViewUtils.formatName
+import com.jlapps.ssbu.util.ViewUtils.transitionToSkinView
 import com.jlapps.ssbu.view.adapter.DefaultRecyclerAdapter
 import com.jlapps.ssbu.view.custom.SelectWheel
 import com.jlapps.ssbu.view.custom.SelectWheel.Companion.lastKnownX
@@ -216,7 +216,7 @@ class CharacterStats : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapter
     }
 
     fun initCharacterImages(){
-        var formattedName = Character.formatName(character.name)
+        var formattedName = formatName(character.name)
 
         Picasso.get()
                 .load("https://storage.googleapis.com/ssbu-3d1bf.appspot.com/skins/${formattedName}/${character.skinDex}")

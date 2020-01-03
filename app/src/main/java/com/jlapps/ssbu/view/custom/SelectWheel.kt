@@ -10,6 +10,7 @@ import android.view.*
 import androidx.core.content.ContextCompat
 import com.jlapps.ssbu.R
 import com.jlapps.ssbu.model.Character
+import com.jlapps.ssbu.util.ViewUtils.getSkin
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import java.lang.Exception
@@ -123,7 +124,7 @@ class SelectWheel @JvmOverloads constructor(context: Context, attrs: AttributeSe
     }
 
     override fun onDraw(canvas: Canvas) {
-        arcs.forEachIndexed {index, arc ->
+        arcs.forEachIndexed {_, arc ->
 
             if(arc.selected) {
 
@@ -218,7 +219,7 @@ class SelectWheel @JvmOverloads constructor(context: Context, attrs: AttributeSe
 //                recalculateArcs()
 //                invalidate()
                 if(index != lastSelected)
-                    Character.getSkin(character,index,object : Target {
+                    getSkin(character,index,object : Target {
                         override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
                         }
 

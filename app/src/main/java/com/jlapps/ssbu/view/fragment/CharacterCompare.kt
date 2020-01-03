@@ -17,6 +17,8 @@ import com.jlapps.ssbu.model.Character
 import com.jlapps.ssbu.R
 import com.jlapps.ssbu.model.CharacterComparison
 import com.jlapps.ssbu.util.FragUtil
+import com.jlapps.ssbu.util.ViewUtils.formatName
+import com.jlapps.ssbu.util.ViewUtils.transitionSkinView
 import com.jlapps.ssbu.view.adapter.DefaultRecyclerAdapter
 import com.jlapps.ssbu.viewmodel.SmashViewModel
 import com.squareup.picasso.Picasso
@@ -73,7 +75,7 @@ class CharacterCompare : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapt
         rootView.pb_char1_comp_speed_progress.progress = CharacterComparison.char1.attributes.speed
         rootView.pb_char1_comp_weight_progress.progress = CharacterComparison.char1.attributes.weight
 
-        var formatted_name = Character.formatName(CharacterComparison.char1.name)
+        var formatted_name = formatName(CharacterComparison.char1.name)
 
         var url = "https://storage.googleapis.com/ssbu-3d1bf.appspot.com/skins/${formatted_name}/${CharacterComparison.char1.skinDex}"
 
@@ -85,7 +87,7 @@ class CharacterCompare : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapt
         Picasso.get()
                 .load(url).resize(800, 0).centerInside()
                 .into(rootView.iv_char1)
-        rootView.iv_char1.setOnClickListener {Character.transitionSkinView(rootView.context,CharacterComparison.char1,rootView.iv_char1)}
+        rootView.iv_char1.setOnClickListener {transitionSkinView(rootView.context,CharacterComparison.char1,rootView.iv_char1)}
         rootView.tv_char1_name.text = CharacterComparison.char1.name
         rootView.tv_char1_series.text = CharacterComparison.char1.series
     }
@@ -98,7 +100,7 @@ class CharacterCompare : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapt
         rootView.pb_char2_comp_weight_progress.progress = CharacterComparison.char2.attributes.weight
 
 
-        var formatted_name = Character.formatName(CharacterComparison.char2.name)
+        var formatted_name = formatName(CharacterComparison.char2.name)
 
         if(CharacterComparison.char2.facesRight() && rootView.iv_char2.scaleX != -1f)
             rootView.iv_char2.scaleX = -1f
@@ -110,7 +112,7 @@ class CharacterCompare : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapt
         Picasso.get()
                 .load(url).resize(800, 0).centerInside()
                 .into(rootView.iv_char2)
-        rootView.iv_char2.setOnClickListener {Character.transitionSkinView(rootView.context,CharacterComparison.char2,rootView.iv_char2)}
+        rootView.iv_char2.setOnClickListener {transitionSkinView(rootView.context,CharacterComparison.char2,rootView.iv_char2)}
         rootView.tv_char2_name.text = CharacterComparison.char2.name
         rootView.tv_char2_series.text = CharacterComparison.char2.series
     }

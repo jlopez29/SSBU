@@ -27,6 +27,7 @@ import com.jlapps.ssbu.util.AnimUtil.fadeView
 import com.jlapps.ssbu.util.FragUtil
 import com.jlapps.ssbu.util.SwipeView.SwipeListener
 import com.jlapps.ssbu.util.SwipeView.SwipeView
+import com.jlapps.ssbu.util.ViewUtils.formatName
 import com.jlapps.ssbu.viewmodel.SmashViewModel
 
 
@@ -145,7 +146,7 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
             FragUtil.swapFragment(activity as AppCompatActivity,FragUtil.fragmentCharacterStats,true,args)
         }
 
-        var formatted_name = Character.formatName(item.name)
+        var formatted_name = formatName(item.name)
 
         var url = "https://storage.googleapis.com/ssbu-3d1bf.appspot.com/skins/${formatted_name}/${item.skinDex}"
         Picasso.get()
