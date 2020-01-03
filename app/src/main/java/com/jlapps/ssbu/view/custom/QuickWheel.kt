@@ -10,41 +10,35 @@ import android.view.*
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.jlapps.ssbu.R
-import com.jlapps.ssbu.model.Character
 import com.jlapps.ssbu.util.ViewUtils
-import com.jlapps.ssbu.util.ViewUtils.getSkin
-import com.squareup.picasso.Picasso
-import com.squareup.picasso.Target
-import kotlinx.android.synthetic.main.fragment_character_stats.*
-import java.lang.Exception
 import kotlin.math.*
 
 
-class SelectWheel @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
+class QuickWheel @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : View(context, attrs, defStyleAttr){
+    private var DEFAULT_SELECTION_COLOR = resources.getColor(R.color.orange_light_select_wheel,null)
 
     var isSelecting = false
+
     private val rect: RectF = RectF(0f, 0f, 0f, 0f)
     private val imgRect:RectF = RectF(0f, 0f, 0f, 0f)
+
     private var arcs = mutableListOf<Arc>()
+
     private val paint: Paint = Paint()
     private val textPaint: Paint = Paint()
     private val innerCirclePaint = Paint()
     private val selectedPaint: Paint = Paint()
     private var imgPaint = Paint()
+
     private lateinit var bitmap: Bitmap
-    lateinit var character: Character
-    private var radius = 0f
-    private var innerRadius = 0f
-    private val colorMap = mapOf(Color.WHITE to ContextCompat.getColor(context, R.color.white),
-            Color.BLUE to ContextCompat.getColor(context, R.color.blue_light_select_wheel),
-            Color.BLUE_LIGHT to ContextCompat.getColor(context, R.color.blue_dark_select_wheel),
-            Color.BLACK to ContextCompat.getColor(context, R.color.black),
-            Color.RED to ContextCompat.getColor(context, R.color.red),
-            Color.ORANGE to ContextCompat.getColor(context, R.color.orange_dark),
-            Color.GREEN to ContextCompat.getColor(context, android.R.color.holo_green_light))
+
+    var radius = 0f
+    var innerRadius = 0f
+    var selectionColor = DEFAULT_SELECTION_COLOR
+
+
 
     private var slices: List<Color> = listOf(Color.RED,Color.ORANGE,Color.RED,Color.ORANGE,Color.RED,Color.ORANGE,Color.RED,Color.ORANGE)
     set(value) {
@@ -56,9 +50,21 @@ class SelectWheel @JvmOverloads constructor(context: Context, attrs: AttributeSe
 
     init {
         setLayerType(LAYER_TYPE_HARDWARE, null)
+
+        getXmlAttributes(attrs)
+
         initPaint()
 
         computeArcs()
+    }
+
+    private fun getXmlAttributes(attrs: AttributeSet?){
+        val a = context.obtainStyledAttributes(attrs, R.styleable.QuickWheel)
+        try {
+            selectionColor = a.getColor(R.styleable.QuickWheel_selectionColor, DEFAULT_SELECTION_COLOR)
+        } finally {
+            a.recycle()
+        }
     }
 
     private fun initPaint(){
@@ -141,6 +147,7 @@ class SelectWheel @JvmOverloads constructor(context: Context, attrs: AttributeSe
             var xCoord = x - rect.centerX()
             var yCoord = (y - rect.centerY()) * -1
 
+            Log.e(TAG,"x ${xCoord} y ${yCoord}")
             var angle = atan2(yCoord,xCoord)
             angle = (angle * (180/ PI)).toFloat()
 
@@ -167,7 +174,7 @@ class SelectWheel @JvmOverloads constructor(context: Context, attrs: AttributeSe
                         arc1.selected = false
 
 //                recalculateArcs()
-                invalidate()
+            invalidate()
 //                if(index != lastSelected)
 //                    getSkin(character,index,object : Target {
 //                        override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
@@ -203,9 +210,9 @@ class SelectWheel @JvmOverloads constructor(context: Context, attrs: AttributeSe
         for(index in slices.indices){
             val startAngle = index * sweepSize
             if(index % 2 == 0)
-                arcs.add(Arc(start = startAngle, sweep = sweepSize, color = colorMap.getValue(Color.BLUE),selected = false))
+                arcs.add(Arc(start = startAngle, sweep = sweepSize, color = resources.getColor(R.color.blue_dark_select_wheel,null),selected = false))
             else
-                arcs.add(Arc(start = startAngle, sweep = sweepSize, color = colorMap.getValue(Color.BLUE_LIGHT),selected = false))
+                arcs.add(Arc(start = startAngle, sweep = sweepSize, color = resources.getColor(R.color.blue_light_select_wheel,null),selected = false))
         }
 
         invalidate()
@@ -249,18 +256,68 @@ class SelectWheel @JvmOverloads constructor(context: Context, attrs: AttributeSe
         private val TAG = "Select Wheel"
         var lastKnownX = 0f
         var lastKnownY = 0f
-        var lastTouchedSlice = 0
         var lastSelected = -1
 
 
-        fun initializeSelectWheel(context:Context,parentContainer:ViewGroup,attachedView:View,collapsingLayout: ViewGroup,character:Character){
-            var view = LayoutInflater.from(context).inflate(R.layout.custom_select_wheel,null)
-            var selectWheelContainer = view.findViewById<View>(R.id.fl_select_wheel)
-            var selectWheel = selectWheelContainer.findViewById<SelectWheel>(R.id.select_wheel)
+        fun initializeSelectWheel(context:Context,parentContainer:ViewGroup){
+            var view = LayoutInflater.from(context).inflate(R.layout.custom_quick_wheel,null)
+            var quickWheelContainer = view.findViewById<View>(R.id.fl_quick_wheel)
+            var quickWheel = quickWheelContainer.findViewById<QuickWheel>(R.id.quick_wheel)
 
-            selectWheel.character = character
+            parentContainer.addView(quickWheelContainer)
 
-            parentContainer.addView(selectWheelContainer)
+            parentContainer.setOnTouchListener{_,e ->
+                if (e.action == MotionEvent.ACTION_DOWN) {
+                    lastKnownX = e.x
+                    lastKnownY = e.y
+                    quickWheel.isSelecting = true
+//                fadeViewSlow(requireContext(),false,iv_character_image){}
+                } else if (e.action == MotionEvent.ACTION_UP) {
+                    circularHideView(quickWheel)
+                    quickWheel.isSelecting = false
+                    quickWheel.resetSelection()
+
+//                    if(lastSelected == -1)
+//                        ViewUtils.fadeViewSlow(context, true, attachedView) {}
+//                    else
+//                        ViewUtils.transitionToSkinView(context, character, attachedView, lastSelected, false)
+                }
+                else if(e.action == MotionEvent.ACTION_MOVE) {
+
+
+                    var newX = e.x - (quickWheelContainer.x)
+                    var newY = e.y - (quickWheelContainer.y)
+                    var area = quickWheel.findAreaTouched(newX,newY)
+                    if(area != lastSelected) {
+                        lastSelected = area
+//                        ViewUtils.transitionToSkinView(context, character, attachedView, lastSelected, true)
+//                    transitionSkinView(context(),character,iv_character_image)
+                    }
+
+                }else if(e.action == MotionEvent.ACTION_CANCEL){
+//                    ViewUtils.fadeViewSlow(context, true, attachedView) {}
+                }
+
+                false
+            }
+
+            parentContainer.setOnLongClickListener {
+
+                if(quickWheel.visibility == INVISIBLE){
+                    quickWheelContainer.x = lastKnownX - quickWheelContainer.width/2
+                    quickWheelContainer.y = lastKnownY - quickWheelContainer.height/2
+                    circularRevealView(quickWheel)
+                }
+                false
+            }
+        }
+
+        fun initializeSelectWheel(context:Context,parentContainer:ViewGroup,attachedView:View,collapsingLayout: ViewGroup){
+            var view = LayoutInflater.from(context).inflate(R.layout.custom_quick_wheel,null)
+            var quickWheelContainer = view.findViewById<View>(R.id.fl_quick_wheel)
+            var quickWheel = quickWheelContainer.findViewById<QuickWheel>(R.id.quick_wheel)
+
+            parentContainer.addView(quickWheelContainer)
 
             attachedView.post {
 
@@ -268,39 +325,39 @@ class SelectWheel @JvmOverloads constructor(context: Context, attrs: AttributeSe
                 var yOffset = attachedView.height * .5
                 var width = (attachedView.width + xOffset).toInt()
                 var height = (attachedView.height + yOffset).toInt()
-                selectWheel.layoutParams = FrameLayout.LayoutParams(width, height)
-                selectWheel.requestLayout()
+                quickWheel.layoutParams = FrameLayout.LayoutParams(width, height)
+                quickWheel.requestLayout()
 
-                selectWheelContainer.x = (attachedView.x - (xOffset/2)).toFloat()
-                selectWheelContainer.y = (attachedView.y - (yOffset/2)).toFloat()
-                selectWheelContainer.requestLayout()
+                quickWheelContainer.x = (attachedView.x - (xOffset/2)).toFloat()
+                quickWheelContainer.y = (attachedView.y - (yOffset/2)).toFloat()
+                quickWheelContainer.requestLayout()
             }
 
             attachedView.setOnTouchListener{_,e ->
                 if (e.action == MotionEvent.ACTION_DOWN) {
                     lastKnownX = e.x
                     lastKnownY = e.y
-                    selectWheel.isSelecting = true
+                    quickWheel.isSelecting = true
 //                fadeViewSlow(requireContext(),false,iv_character_image){}
                 } else if (e.action == MotionEvent.ACTION_UP) {
-                    circularHideView(selectWheel)
+                    circularHideView(quickWheel)
                     enableScroll(collapsingLayout)
-                    selectWheel.isSelecting = false
-                    selectWheel.resetSelection()
+                    quickWheel.isSelecting = false
+                    quickWheel.resetSelection()
 
-                    if(lastSelected == -1)
-                        ViewUtils.fadeViewSlow(context, true, attachedView) {}
-                    else
-                        ViewUtils.transitionToSkinView(context, character, attachedView, lastSelected, false)
+//                    if(lastSelected == -1)
+//                        ViewUtils.fadeViewSlow(context, true, attachedView) {}
+//                    else
+//                        ViewUtils.transitionToSkinView(context, character, attachedView, lastSelected, false)
                 }
                 else if(e.action == MotionEvent.ACTION_MOVE) {
 
                     var newX = e.x
                     var newY = e.y
-                    var area = selectWheel.findAreaTouched(newX,newY)
+                    var area = quickWheel.findAreaTouched(newX,newY)
                     if(area != lastSelected) {
                         lastSelected = area
-                        ViewUtils.transitionToSkinView(context, character, attachedView, lastSelected, true)
+//                        ViewUtils.transitionToSkinView(context, character, attachedView, lastSelected, true)
 //                    transitionSkinView(context(),character,iv_character_image)
                     }
 
@@ -312,13 +369,12 @@ class SelectWheel @JvmOverloads constructor(context: Context, attrs: AttributeSe
             }
 
             attachedView.setOnLongClickListener {
-                Log.e(TAG,"Long click")
 
-                if(selectWheel.visibility == View.INVISIBLE){
-//                selectWheelContainer.x = iv_character_image.width/2f
-//                selectWheelContainer.y = iv_character_image.height/2f
+                if(quickWheel.visibility == View.INVISIBLE){
+//                quickWheelContainer.x = iv_character_image.width/2f
+//                quickWheelContainer.y = iv_character_image.height/2f
                     disableScroll(collapsingLayout)
-                    circularRevealView(selectWheel)
+                    circularRevealView(quickWheel)
                 }
                 false
             }
@@ -342,10 +398,4 @@ class SelectWheel @JvmOverloads constructor(context: Context, attrs: AttributeSe
         }
     }
 
-}
-
-public class Arc(var start: Float, var sweep: Float, var color: Int, var selected:Boolean)
-
-public enum class Color {
-    WHITE, BLUE, BLUE_LIGHT, BLACK, RED, ORANGE, GREEN
 }

@@ -4,4 +4,8 @@
         <attr name="LeftRippleColor" format="color"/>
         <attr name="RightRippleColor" format="color"/>
     </declare-styleable>
+
+    <declare-styleable name="QuickWheel">
+        <attr name="selectionColor" format="color"/>
+    </declare-styleable>
 </resources>

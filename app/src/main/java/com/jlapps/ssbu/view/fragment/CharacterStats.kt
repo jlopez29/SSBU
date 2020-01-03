@@ -76,94 +76,10 @@ class CharacterStats : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapter
 
     fun initselectWheel(){
 
-        var view = LayoutInflater.from(context).inflate(R.layout.custom_select_wheel,null)
-        var selectWheelContainer = view.findViewById<View>(R.id.fl_select_wheel)
-        var imgx = iv_character_image.x
-        var imgy = iv_character_image.y
-        var selectWheel = selectWheelContainer.findViewById<SelectWheel>(R.id.select_wheel)
-        iv_character_image.post {
+        SelectWheel.initializeSelectWheel(requireContext(),cl_stat_container,iv_character_image,ctbl_character_stats,character)
 
-            var xOffset = iv_character_image.width * .5
-            var yOffset = iv_character_image.height * .5
-            var width = (iv_character_image.width + xOffset).toInt()
-            var height = (iv_character_image.height + yOffset).toInt()
-            selectWheel.layoutParams = FrameLayout.LayoutParams(width, height)
-            selectWheel.requestLayout()
-
-            selectWheelContainer.x = (iv_character_image.x - (xOffset/2)).toFloat()
-            selectWheelContainer.y = (iv_character_image.y - (yOffset/2)).toFloat()
-            selectWheelContainer.requestLayout()
-        }
-
-
-//        selectWheel.visibility = View.INVISIBLE
-        selectWheel.character = character
-        cl_stat_container.addView(selectWheelContainer)
-//        selectWheel.amount = 8
-
-        iv_character_image.setOnTouchListener{_,e ->
-            if (e.action == MotionEvent.ACTION_DOWN) {
-                lastKnownX = e.x
-                lastKnownY = e.y
-                selectWheel.isSelecting = true
-//                fadeViewSlow(requireContext(),false,iv_character_image){}
-            } else if (e.action == MotionEvent.ACTION_UP) {
-                circularHideView(selectWheel)
-                enableScroll()
-                selectWheel.isSelecting = false
-                selectWheel.resetSelection()
-
-                if(lastSelected == -1)
-                    fadeViewSlow(requireContext(),true,iv_character_image){}
-                else
-                    transitionToSkinView(requireContext(),character,iv_character_image, lastSelected,false)
-            }
-            else if(e.action == MotionEvent.ACTION_MOVE) {
-
-                var newX = e.x
-                var newY = e.y
-                var area = selectWheel.findAreaTouched(newX,newY)
-                if(area != lastSelected) {
-                    lastSelected = area
-                        transitionToSkinView(requireContext(),character,iv_character_image, lastSelected,true)
-//                    transitionSkinView(requireContext(),character,iv_character_image)
-                }
-
-            }else if(e.action == MotionEvent.ACTION_CANCEL){
-                fadeViewSlow(requireContext(),true,iv_character_image){}
-            }
-
-            false
-        }
-
-        iv_character_image.setOnLongClickListener {
-            Log.e(TAG,"Long click")
-
-            if(selectWheel.visibility == View.INVISIBLE){
-//                selectWheelContainer.x = iv_character_image.width/2f
-//                selectWheelContainer.y = iv_character_image.height/2f
-                disableScroll()
-                circularRevealView(selectWheel)
-            }
-            false
-        }
-    }
-    private fun enableScroll() {
-        val params = ctbl_character_stats.getLayoutParams() as AppBarLayout.LayoutParams
-        params.scrollFlags = (
-                AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
-                        or AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED
-                )
-        ctbl_character_stats.setLayoutParams(params)
-        ctbl_character_stats.requestDisallowInterceptTouchEvent(false)
     }
 
-    private fun disableScroll() {
-        val params = ctbl_character_stats.getLayoutParams() as AppBarLayout.LayoutParams
-        params.scrollFlags = 0
-        ctbl_character_stats.setLayoutParams(params)
-        ctbl_character_stats.requestDisallowInterceptTouchEvent(true)
-    }
 
     override fun bindItemToView(item: Any, position: Int, viewHolder: RecyclerView.ViewHolder) {
         if(item is Int){

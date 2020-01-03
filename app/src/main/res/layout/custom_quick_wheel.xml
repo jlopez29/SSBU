@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:id="@+id/fl_quick_wheel"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <com.jlapps.ssbu.view.custom.QuickWheel
+            android:id="@+id/quick_wheel"
+            app:selectionColor="@color/red"
+            android:layout_width="200dp"
+            android:layout_height="200dp"/>
+
+</FrameLayout>

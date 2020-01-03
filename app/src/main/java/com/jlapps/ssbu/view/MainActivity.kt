@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.jlapps.ssbu.R
 import com.jlapps.ssbu.util.AnimUtil.fadeView
 import com.jlapps.ssbu.util.FragUtil
+import com.jlapps.ssbu.view.custom.QuickWheel
 import com.jlapps.ssbu.view.custom.SelectWheel
 import com.jlapps.ssbu.viewmodel.SmashViewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -23,23 +24,26 @@ class MainActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        viewModel = ViewModelProviders.of(this)[SmashViewModel::class.java]
+        QuickWheel.initializeSelectWheel(context = this,parentContainer = cl_main)
 
-        viewModel.getCharacters(this)
 
-        loading.visibility = View.VISIBLE
-
-        FragUtil.swapFragment(this,FragUtil.fragmentCharacterSelect,false,Bundle())
-
-        viewModel.loading.observe(this, Observer{isLoading ->
-            if(isLoading != null){
-                if(isLoading)
-                    fadeView(this,true,loading)
-                else
-                    fadeView(this,false,loading)
-
-            }
-        })
+//        viewModel = ViewModelProviders.of(this)[SmashViewModel::class.java]
+//
+//        viewModel.getCharacters(this)
+//
+//        loading.visibility = View.VISIBLE
+//
+//        FragUtil.swapFragment(this,FragUtil.fragmentCharacterSelect,false,Bundle())
+//
+//        viewModel.loading.observe(this, Observer{isLoading ->
+//            if(isLoading != null){
+//                if(isLoading)
+//                    fadeView(this,true,loading)
+//                else
+//                    fadeView(this,false,loading)
+//
+//            }
+//        })
     }
 
 }
