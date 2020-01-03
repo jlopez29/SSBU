@@ -20,34 +20,6 @@ import kotlin.math.*
 class SelectWheel @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : View(context, attrs, defStyleAttr){
 
-    private var radius = 0f
-
-    private var slices: List<Color> = listOf(Color.RED,Color.ORANGE,Color.RED,Color.ORANGE,Color.RED,Color.ORANGE,Color.RED,Color.ORANGE)
-    set(value) {
-        if (field != value || arcs.isEmpty()) {
-            field = value
-            computeArcs()
-        }
-    }
-//    var amount: Int = 0
-//        get() = 0
-//        set(value){
-//            field = value
-//            initSlices()
-//            computeArcs()
-//            invalidate()
-//        }
-//
-//    fun initSlices(){
-//        for(i in 0..amount){
-//            if(i % 2 == 0)
-//                slices.add(Color.ORANGE)
-//            else
-//                slices.add(Color.RED)
-//        }
-//    }
-
-
     private val TAG = "Select Wheel"
     var isSelecting = false
     private val rect: RectF = RectF(0f, 0f, 0f, 0f)
@@ -60,7 +32,8 @@ class SelectWheel @JvmOverloads constructor(context: Context, attrs: AttributeSe
     private var imgPaint = Paint()
     private lateinit var bitmap: Bitmap
     lateinit var character: Character
-
+    private var radius = 0f
+    private var innerRadius = 0f
     private val colorMap = mapOf(Color.WHITE to ContextCompat.getColor(context, R.color.white),
             Color.BLUE to ContextCompat.getColor(context, R.color.blue_light_select_wheel),
             Color.BLUE_LIGHT to ContextCompat.getColor(context, R.color.blue_dark_select_wheel),
@@ -69,18 +42,12 @@ class SelectWheel @JvmOverloads constructor(context: Context, attrs: AttributeSe
             Color.ORANGE to ContextCompat.getColor(context, R.color.orange_dark),
             Color.GREEN to ContextCompat.getColor(context, android.R.color.holo_green_light))
 
-    private fun computeArcs() {
-
-        val sweepSize: Float = 360f / slices.size * -1
-        for(index in slices.indices){
-            val startAngle = index * sweepSize
-            if(index % 2 == 0)
-                arcs.add(Arc(start = startAngle, sweep = sweepSize, color = colorMap.getValue(Color.BLUE),selected = false))
-            else
-                arcs.add(Arc(start = startAngle, sweep = sweepSize, color = colorMap.getValue(Color.BLUE_LIGHT),selected = false))
+    private var slices: List<Color> = listOf(Color.RED,Color.ORANGE,Color.RED,Color.ORANGE,Color.RED,Color.ORANGE,Color.RED,Color.ORANGE)
+    set(value) {
+        if (field != value || arcs.isEmpty()) {
+            field = value
+            computeArcs()
         }
-
-        invalidate()
     }
 
     init {
@@ -105,8 +72,6 @@ class SelectWheel @JvmOverloads constructor(context: Context, attrs: AttributeSe
 
         innerCirclePaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
         innerCirclePaint.color = ContextCompat.getColor(context, android.R.color.transparent)
-//        innerCirclePaint.shader = shader
-
 
         textPaint.textSize = 60f
         textPaint.textAlign = Paint.Align.CENTER
@@ -121,6 +86,7 @@ class SelectWheel @JvmOverloads constructor(context: Context, attrs: AttributeSe
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         rect.set(0f, 0f, w.toFloat(), h.toFloat())
+        innerRadius = rect.height()/3
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -130,10 +96,12 @@ class SelectWheel @JvmOverloads constructor(context: Context, attrs: AttributeSe
 
                 canvas.drawArc(rect, arc.start, arc.sweep, true, selectedPaint)
 
-                var left = rect.centerY() - 175f
-                var right = rect.centerY() + 175f
+//                var left = rect.centerY() - 175f
+//                var right = rect.centerY() + 175f
+//
+//                imgRect.set(left,left,right,right)
 
-                imgRect.set(left,left,right,right)
+
 //                canvas.drawBitmap(bitmap,null,imgRect,Paint())
 //                var medianAngle = (arc.start + (arc.sweep / 2f)) * Math.PI / 180f
 //                radius = rect.centerY() - 50
@@ -153,33 +121,13 @@ class SelectWheel @JvmOverloads constructor(context: Context, attrs: AttributeSe
 //                canvas.drawText(index.toString(), textX, textY, textPaint)
             }
 
-            canvas.drawCircle(rect.centerX(),rect.centerY(),175f,innerCirclePaint)
+            canvas.drawCircle(rect.centerX(),rect.centerY(),innerRadius,innerCirclePaint)
 
-            imgRect.set(rect.centerY() - 175,rect.centerY() - 175,rect.centerY() + 175,rect.centerY() + 175)
-            canvas.drawBitmap(bitmap,null,imgRect,Paint())
+//            imgRect.set(rect.centerY() - innerRadius,rect.centerY() - innerRadius,rect.centerY() + innerRadius,rect.centerY() + innerRadius)
+//            canvas.drawBitmap(bitmap,null,imgRect,Paint())
         }
 
     }
-
-    fun Drawable.toBitmap(): Bitmap {
-        if (this is BitmapDrawable) {
-            return bitmap
-        }
-
-        val width = if (bounds.isEmpty) intrinsicWidth else bounds.width()
-        val height = if (bounds.isEmpty) intrinsicHeight else bounds.height()
-
-        return Bitmap.createBitmap(width.nonZero(), height.nonZero(), Bitmap.Config.ARGB_8888).also {
-            val canvas = Canvas(it)
-            setBounds(0, 0, canvas.width, canvas.height)
-            draw(canvas)
-        }
-    }
-
-    private fun Int.nonZero() = if (this <= 0) 1 else this
-
-    private fun toCartesianX(theta:Float,radius:Float) = radius * cos(theta)
-    private fun toCartesianY(theta:Float,radius:Float) = radius * sin(theta)
 
     fun findAreaTouched(x:Float, y:Float):Int{
 
@@ -188,8 +136,6 @@ class SelectWheel @JvmOverloads constructor(context: Context, attrs: AttributeSe
 
             var xCoord = x - rect.centerX()
             var yCoord = (y - rect.centerY()) * -1
-
-
 
             var angle = atan2(yCoord,xCoord)
             angle = (angle * (180/ PI)).toFloat()
@@ -217,26 +163,25 @@ class SelectWheel @JvmOverloads constructor(context: Context, attrs: AttributeSe
                         arc1.selected = false
 
 //                recalculateArcs()
-//                invalidate()
-                if(index != lastSelected)
-                    getSkin(character,index,object : Target {
-                        override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-                        }
+                invalidate()
+//                if(index != lastSelected)
+//                    getSkin(character,index,object : Target {
+//                        override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+//                        }
+//
+//                        override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
+//                        }
+//
+//                        override fun onBitmapLoaded(bmp: Bitmap?, from: Picasso.LoadedFrom?) {
+//                            if(bmp != null) {
+//                                bitmap = bmp
+//                                invalidate()
+//                            }
+//                        }
+//
+//                    },170)
 
-                        override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
-                        }
-
-                        override fun onBitmapLoaded(bmp: Bitmap?, from: Picasso.LoadedFrom?) {
-                            if(bmp != null) {
-                                Log.e(TAG,"loaded")
-                                bitmap = bmp
-                                invalidate()
-                            }
-                        }
-
-                    },170)
-
-                lastSelected = index
+//                lastSelected = index
                 return index
             }else
                 arc.selected = false
@@ -246,6 +191,20 @@ class SelectWheel @JvmOverloads constructor(context: Context, attrs: AttributeSe
         }
 
         return -1
+    }
+
+    private fun computeArcs() {
+
+        val sweepSize: Float = 360f / slices.size * -1
+        for(index in slices.indices){
+            val startAngle = index * sweepSize
+            if(index % 2 == 0)
+                arcs.add(Arc(start = startAngle, sweep = sweepSize, color = colorMap.getValue(Color.BLUE),selected = false))
+            else
+                arcs.add(Arc(start = startAngle, sweep = sweepSize, color = colorMap.getValue(Color.BLUE_LIGHT),selected = false))
+        }
+
+        invalidate()
     }
 
     fun recalculateArcs(){
@@ -261,6 +220,26 @@ class SelectWheel @JvmOverloads constructor(context: Context, attrs: AttributeSe
         for( arc in arcs )
             arc.selected = false
     }
+
+    fun Drawable.toBitmap(): Bitmap {
+        if (this is BitmapDrawable) {
+            return bitmap
+        }
+
+        val width = if (bounds.isEmpty) intrinsicWidth else bounds.width()
+        val height = if (bounds.isEmpty) intrinsicHeight else bounds.height()
+
+        return Bitmap.createBitmap(width.nonZero(), height.nonZero(), Bitmap.Config.ARGB_8888).also {
+            val canvas = Canvas(it)
+            setBounds(0, 0, canvas.width, canvas.height)
+            draw(canvas)
+        }
+    }
+
+    private fun Int.nonZero() = if (this <= 0) 1 else this
+
+    private fun toCartesianX(theta:Float,radius:Float) = radius * cos(theta)
+    private fun toCartesianY(theta:Float,radius:Float) = radius * sin(theta)
 
     companion object{
         var lastKnownX = 0f

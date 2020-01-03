@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -54,6 +55,10 @@ class CharacterStats : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapter
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).actionBar?.setHomeButtonEnabled(true)
         (activity as AppCompatActivity).actionBar?.setDisplayShowHomeEnabled(true)
@@ -73,19 +78,35 @@ class CharacterStats : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapter
 
         var view = LayoutInflater.from(context).inflate(R.layout.custom_select_wheel,null)
         var selectWheelContainer = view.findViewById<View>(R.id.fl_select_wheel)
+        var imgx = iv_character_image.x
+        var imgy = iv_character_image.y
         var selectWheel = selectWheelContainer.findViewById<SelectWheel>(R.id.select_wheel)
+        iv_character_image.post {
 
-        selectWheel.visibility = View.INVISIBLE
+            var xOffset = iv_character_image.width * .5
+            var yOffset = iv_character_image.height * .5
+            var width = (iv_character_image.width + xOffset).toInt()
+            var height = (iv_character_image.height + yOffset).toInt()
+            selectWheel.layoutParams = FrameLayout.LayoutParams(width, height)
+            selectWheel.requestLayout()
+
+            selectWheelContainer.x = (iv_character_image.x - (xOffset/2)).toFloat()
+            selectWheelContainer.y = (iv_character_image.y - (yOffset/2)).toFloat()
+            selectWheelContainer.requestLayout()
+        }
+
+
+//        selectWheel.visibility = View.INVISIBLE
         selectWheel.character = character
         cl_stat_container.addView(selectWheelContainer)
 //        selectWheel.amount = 8
 
         iv_character_image.setOnTouchListener{_,e ->
-            Log.e(TAG,"action ${e.action}")
             if (e.action == MotionEvent.ACTION_DOWN) {
                 lastKnownX = e.x
                 lastKnownY = e.y
-                fadeViewSlow(requireContext(),false,iv_character_image){}
+                selectWheel.isSelecting = true
+//                fadeViewSlow(requireContext(),false,iv_character_image){}
             } else if (e.action == MotionEvent.ACTION_UP) {
                 circularHideView(selectWheel)
                 enableScroll()
@@ -98,16 +119,16 @@ class CharacterStats : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapter
                     transitionToSkinView(requireContext(),character,iv_character_image, lastSelected,false)
             }
             else if(e.action == MotionEvent.ACTION_MOVE) {
-                if(!selectWheel.isSelecting) {
-                    selectWheel.isSelecting = true
-                }else{
-                    var newX = e.x
-                    var newY = e.y
-//                    if(selectWheel.findAreaTouched(newX,newY) != lastSelected) {
-                        lastSelected = selectWheel.findAreaTouched(newX, newY)
-//                        transitionToSkinView(requireContext(),character,iv_character_image, lastSelected)
-//                    }
+
+                var newX = e.x
+                var newY = e.y
+                var area = selectWheel.findAreaTouched(newX,newY)
+                if(area != lastSelected) {
+                    lastSelected = area
+                        transitionToSkinView(requireContext(),character,iv_character_image, lastSelected,true)
+//                    transitionSkinView(requireContext(),character,iv_character_image)
                 }
+
             }else if(e.action == MotionEvent.ACTION_CANCEL){
                 fadeViewSlow(requireContext(),true,iv_character_image){}
             }
@@ -119,8 +140,8 @@ class CharacterStats : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapter
             Log.e(TAG,"Long click")
 
             if(selectWheel.visibility == View.INVISIBLE){
-                selectWheelContainer.x = lastKnownX
-                selectWheelContainer.y = lastKnownY
+//                selectWheelContainer.x = iv_character_image.width/2f
+//                selectWheelContainer.y = iv_character_image.height/2f
                 disableScroll()
                 circularRevealView(selectWheel)
             }
