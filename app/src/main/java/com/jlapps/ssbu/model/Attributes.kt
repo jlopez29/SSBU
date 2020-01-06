@@ -7,14 +7,16 @@ class Attributes constructor(val damage: Int, @SerializedName("kill_power") val 
 
     fun getAttributes(): ArrayList<Int> = ArrayList(arrayListOf(damage, weight, defense, killPower, speed, recovery, neutral))
 
-    companion object{
-        val DAMAGE = 0
-        val WEIGHT = 1
-        val DEFENSE = 2
-        val KILL_POWER = 3
-        val SPEED = 4
-        val RECOVERY = 5
-        val NEUTRAL = 6
+    enum class AttributeType{
+
+        DAMAGE,
+        WEIGHT,
+        DEFENSE,
+        KILL_POWER,
+        SPEED,
+        RECOVERY,
+        NEUTRAL
+
     }
 
 }

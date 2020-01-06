@@ -167,48 +167,49 @@ class CharacterStats : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapter
 
     override fun bindItemToView(item: Any, position: Int, viewHolder: RecyclerView.ViewHolder) {
         if(item is Int){
-            when(position){
-                Attributes.DAMAGE -> {
+            when(Attributes.AttributeType.values()[position]){
+
+                Attributes.AttributeType.DAMAGE -> {
 
                     viewHolder.itemView.iv_character_stat_icon.setImageResource(R.drawable.ic_damage)
                     viewHolder.itemView.tv_character_stat_name.text = "Damage"
                     viewHolder.itemView.pb_character_stat_progress.progress = item
 
                 }
-                Attributes.WEIGHT -> {
+                Attributes.AttributeType.WEIGHT -> {
 
                     viewHolder.itemView.iv_character_stat_icon.setImageResource(R.drawable.ic_weight)
                     viewHolder.itemView.tv_character_stat_name.text = "Weight"
                     viewHolder.itemView.pb_character_stat_progress.progress = item
 
                 }
-                Attributes.DEFENSE -> {
+                Attributes.AttributeType.DEFENSE -> {
 
                     viewHolder.itemView.iv_character_stat_icon.setImageResource(R.drawable.ic_defense)
                     viewHolder.itemView.tv_character_stat_name.text = "Defense"
                     viewHolder.itemView.pb_character_stat_progress.progress = item
 
                 }
-                Attributes.KILL_POWER -> {
+                Attributes.AttributeType.KILL_POWER -> {
 
                     viewHolder.itemView.iv_character_stat_icon.setImageResource(R.drawable.ic_kill_power)
                     viewHolder.itemView.tv_character_stat_name.text = "Kill Power"
                     viewHolder.itemView.pb_character_stat_progress.progress = item
 
                 }
-                Attributes.SPEED -> {
+                Attributes.AttributeType.SPEED -> {
                     viewHolder.itemView.iv_character_stat_icon.setImageResource(R.drawable.ic_speed)
                     viewHolder.itemView.tv_character_stat_name.text = "Speed"
                     viewHolder.itemView.pb_character_stat_progress.progress = item
                 }
-                Attributes.RECOVERY -> {
+                Attributes.AttributeType.RECOVERY -> {
 
                     viewHolder.itemView.iv_character_stat_icon.setImageResource(R.drawable.ic_recover)
                     viewHolder.itemView.tv_character_stat_name.text = "Recovery"
                     viewHolder.itemView.pb_character_stat_progress.progress = item
 
                 }
-                Attributes.NEUTRAL -> {
+                Attributes.AttributeType.NEUTRAL -> {
 
                     viewHolder.itemView.iv_character_stat_icon.setImageResource(R.drawable.ic_neutral)
                     viewHolder.itemView.tv_character_stat_name.text = "Neutral"
