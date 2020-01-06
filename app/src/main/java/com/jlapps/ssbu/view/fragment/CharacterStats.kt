@@ -38,6 +38,7 @@ import kotlinx.android.synthetic.main.item_move.view.*
 import kotlinx.android.synthetic.main.layout_character_moves.*
 import kotlinx.android.synthetic.main.layout_character_stats.*
 import kotlinx.android.synthetic.main.layout_character_traits.*
+import kotlin.math.abs
 
 
 class CharacterStats : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapterListener<Any>{
@@ -101,6 +102,13 @@ class CharacterStats : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapter
         cl_stat_container.addView(selectWheelContainer)
 //        selectWheel.amount = 8
 
+//        iv_character_image.post {
+//            var xOffset = abs(selectWheelContainer.width - iv_character_image.width)/2
+//            var yOffset = abs(selectWheelContainer.height - iv_character_image.height)/2
+//            selectWheelContainer.x = iv_character_image.x - xOffset
+//            selectWheelContainer.y = iv_character_image.y - yOffset
+//        }
+
         iv_character_image.setOnTouchListener{_,e ->
             if (e.action == MotionEvent.ACTION_DOWN) {
                 lastKnownX = e.x
@@ -120,8 +128,13 @@ class CharacterStats : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapter
             }
             else if(e.action == MotionEvent.ACTION_MOVE) {
 
-                var newX = e.x
-                var newY = e.y
+                var x = e.x
+                var y = e.y
+                var width = abs(selectWheelContainer.x - selectWheelContainer.width/2)
+                var height = abs(selectWheelContainer.y - selectWheelContainer.height/2)
+
+                var newX = x - width
+                var newY = y - height
                 var area = selectWheel.findAreaTouched(newX,newY)
                 if(area != lastSelected) {
                     lastSelected = area
@@ -140,8 +153,6 @@ class CharacterStats : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapter
             Log.e(TAG,"Long click")
 
             if(selectWheel.visibility == View.INVISIBLE){
-//                selectWheelContainer.x = iv_character_image.width/2f
-//                selectWheelContainer.y = iv_character_image.height/2f
                 disableScroll()
                 circularRevealView(selectWheel)
             }

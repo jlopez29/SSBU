@@ -134,8 +134,8 @@ class SelectWheel @JvmOverloads constructor(context: Context, attrs: AttributeSe
         arcs.forEachIndexed { index, arc ->
 
 
-            var xCoord = x - rect.centerX()
-            var yCoord = (y - rect.centerY()) * -1
+            var xCoord = x
+            var yCoord = (y) * -1
 
             var angle = atan2(yCoord,xCoord)
             angle = (angle * (180/ PI)).toFloat()
@@ -150,7 +150,7 @@ class SelectWheel @JvmOverloads constructor(context: Context, attrs: AttributeSe
             var end = abs(arc.start + arc.sweep)
 
 //            Log.e(TAG,"\n\n*************${index}\n\n")
-//            Log.e(TAG,"x,y ${xCoord},${yCoord}")
+            Log.e(TAG,"x,y ${xCoord},${yCoord}")
 //            Log.e(TAG,"angle ${angle}")
 //            Log.e(TAG,"start angle is ${start}")
 //            Log.e(TAG,"end angle is ${end}")
