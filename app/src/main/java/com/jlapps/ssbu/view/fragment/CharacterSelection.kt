@@ -3,10 +3,8 @@ package com.jlapps.ssbu.view.fragment
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
@@ -29,6 +27,7 @@ import com.jlapps.ssbu.util.SwipeView.SwipeListener
 import com.jlapps.ssbu.util.SwipeView.SwipeView
 import com.jlapps.ssbu.util.ViewUtils.formatName
 import com.jlapps.ssbu.viewmodel.SmashViewModel
+import kotlin.random.Random
 
 
 class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapterListener<Character>{
@@ -52,6 +51,10 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
 
         initLiveData()
 
+        iv_skin_randomizer.setOnClickListener({
+            randomizeSkins()
+        })
+
         recycler = activity!!.findViewById(R.id.rv_characters)
 
         recycler.layoutManager = LinearLayoutManager(context)
@@ -59,6 +62,17 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
                 R.layout.item_character,this)
         recycler.adapter = adapter
 
+    }
+
+    fun randomizeSkins(){
+        Log.e(TAG,"randomize")
+        for(char in characters){
+            char.skinDex = Random.nextInt(0,8)
+        }
+
+        adapter = DefaultRecyclerAdapter(characters,
+                R.layout.item_character,this)
+        recycler.adapter = adapter
     }
 
     override fun bindItemToView(item: Character, position: Int, viewHolder: RecyclerView.ViewHolder) {

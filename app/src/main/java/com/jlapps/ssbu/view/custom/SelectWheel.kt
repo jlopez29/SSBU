@@ -138,15 +138,14 @@ class SelectWheel @JvmOverloads constructor(context: Context, attrs: AttributeSe
         arcs.forEachIndexed { index, arc ->
 
 
-            var xCoord = x - rect.centerX()
-            var yCoord = (y - rect.centerY()) * -1
+            var xCoord = x
+            var yCoord = (y) * -1
 
             var angle = atan2(yCoord,xCoord)
             angle = (angle * (180/ PI)).toFloat()
 
             if(angle < 0)
                 angle += 360
-
 
             var start = abs(arc.start)
 
@@ -162,6 +161,7 @@ class SelectWheel @JvmOverloads constructor(context: Context, attrs: AttributeSe
             if(angle in start..end) {
 //                    Log.e(TAG, "Touched sliced ${index}")
                 arc.selected = true
+
                 for( arc1 in arcs )
                     if(arc1 != arc)
                         arc1.selected = false
@@ -291,16 +291,26 @@ class SelectWheel @JvmOverloads constructor(context: Context, attrs: AttributeSe
                     if(lastSelected == -1)
                         ViewUtils.fadeViewSlow(context, true, attachedView) {}
                     else
-                        ViewUtils.transitionToSkinView(context, character, attachedView, lastSelected, false)
+                        ViewUtils.transitionToSkinView(context, character, attachedView, lastSelected, fadeout = false, animate = true)
                 }
                 else if(e.action == MotionEvent.ACTION_MOVE) {
 
-                    var newX = e.x
-                    var newY = e.y
+                    var x = e.x
+                    var y = e.y
+                    var selectX = selectWheelContainer.x
+                    var selectY = selectWheelContainer.y*2
+                    var selectWidth = selectWheelContainer.width
+                    var selectHeight = selectWheelContainer.height
+                    var width = abs((selectWidth/2) - selectX)
+                    var height = abs( (selectHeight/2) - selectY)
+
+                        var newX = e.x - width
+                    var newY = e.y - height
+
                     var area = selectWheel.findAreaTouched(newX,newY)
                     if(area != lastSelected) {
                         lastSelected = area
-                        ViewUtils.transitionToSkinView(context, character, attachedView, lastSelected, true)
+                        ViewUtils.transitionToSkinView(context, character, attachedView, lastSelected, fadeout = true, animate = false)
 //                    transitionSkinView(context(),character,iv_character_image)
                     }
 

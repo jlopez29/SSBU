@@ -31,6 +31,15 @@
                     style="@style/text_toolbar"
                     android:layout_centerInParent="true"/>
 
+                <ImageView
+                    android:id="@+id/iv_skin_randomizer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_rando"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/default_margin"/>
+
             </RelativeLayout>
 
         </androidx.appcompat.widget.Toolbar>

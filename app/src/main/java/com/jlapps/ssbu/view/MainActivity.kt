@@ -24,26 +24,26 @@ class MainActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        QuickWheel.initializeSelectWheel(context = this,parentContainer = cl_main)
+//        QuickWheel.initializeSelectWheel(context = this,parentContainer = cl_main)
 
 
-//        viewModel = ViewModelProviders.of(this)[SmashViewModel::class.java]
-//
-//        viewModel.getCharacters(this)
-//
-//        loading.visibility = View.VISIBLE
-//
-//        FragUtil.swapFragment(this,FragUtil.fragmentCharacterSelect,false,Bundle())
-//
-//        viewModel.loading.observe(this, Observer{isLoading ->
-//            if(isLoading != null){
-//                if(isLoading)
-//                    fadeView(this,true,loading)
-//                else
-//                    fadeView(this,false,loading)
-//
-//            }
-//        })
+        viewModel = ViewModelProviders.of(this)[SmashViewModel::class.java]
+
+        viewModel.getCharacters(this)
+
+        loading.visibility = View.VISIBLE
+
+        FragUtil.swapFragment(this,FragUtil.fragmentCharacterSelect,false,Bundle())
+
+        viewModel.loading.observe(this, Observer{isLoading ->
+            if(isLoading != null){
+                if(isLoading)
+                    fadeView(this,true,loading)
+                else
+                    fadeView(this,false,loading)
+
+            }
+        })
     }
 
 }

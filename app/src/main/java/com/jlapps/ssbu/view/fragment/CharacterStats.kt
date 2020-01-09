@@ -6,31 +6,22 @@ import android.os.Bundle
 import android.transition.TransitionManager
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.appbar.AppBarLayout
 import com.jlapps.ssbu.R
 import com.jlapps.ssbu.model.Attributes
 import com.jlapps.ssbu.model.Character
 import com.jlapps.ssbu.model.Move
 import com.jlapps.ssbu.model.formatString
 import com.jlapps.ssbu.util.AnimUtil.animateView
-import com.jlapps.ssbu.util.ViewUtils.fadeViewSlow
 import com.jlapps.ssbu.util.ViewUtils.formatName
-import com.jlapps.ssbu.util.ViewUtils.transitionToSkinView
 import com.jlapps.ssbu.view.adapter.DefaultRecyclerAdapter
 import com.jlapps.ssbu.view.custom.SelectWheel
-import com.jlapps.ssbu.view.custom.SelectWheel.Companion.lastKnownX
-import com.jlapps.ssbu.view.custom.SelectWheel.Companion.lastKnownY
-import com.jlapps.ssbu.view.custom.SelectWheel.Companion.lastSelected
-import com.jlapps.ssbu.view.custom.circularHideView
-import com.jlapps.ssbu.view.custom.circularRevealView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_character_stats.*
 import kotlinx.android.synthetic.main.item_character_stat.view.*
@@ -52,10 +43,6 @@ class CharacterStats : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapter
         return inflater.inflate(R.layout.fragment_character_stats,container,false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -64,6 +51,7 @@ class CharacterStats : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapter
         (activity as AppCompatActivity).actionBar?.setDisplayShowHomeEnabled(true)
         character = arguments?.get("char") as Character
         ctbl_character_stats.title = character.name
+        setHasOptionsMenu(true)
 
         initCharacterImages()
 
