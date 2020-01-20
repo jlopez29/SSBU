@@ -88,11 +88,25 @@ object ViewUtils {
                 .load(url).resize(width, 0).centerInside()
                 .into(target)
     }
-    fun transitionToSkinView(ctx: Context, char: Character, view: View, index:Int, fadeout:Boolean) {
+    fun transitionToSkinView(ctx: Context, char: Character, view: View, index:Int, fadeout:Boolean, animate:Boolean) {
 
-        if(fadeout) {
-            fadeViewSlow(ctx, false, view) {
+        if(animate){
+            if(fadeout) {
+                fadeViewSlow(ctx, false, view) {
 
+                    char.skinDex = index
+
+                    var formatted_name = formatName(char.name)
+
+                    var url = "https://storage.googleapis.com/ssbu-3d1bf.appspot.com/skins/${formatted_name}/${char.skinDex}"
+                    Picasso.get()
+                            .load(url).resize(800, 0).centerInside()
+                            .into(view as ImageView)
+
+                    fadeViewSlow(ctx, true, view) {}
+                }
+            }else
+            {
                 char.skinDex = index
 
                 var formatted_name = formatName(char.name)
@@ -104,8 +118,8 @@ object ViewUtils {
 
                 fadeViewSlow(ctx, true, view) {}
             }
-        }else
-        {
+        }else{
+
             char.skinDex = index
 
             var formatted_name = formatName(char.name)
@@ -114,9 +128,8 @@ object ViewUtils {
             Picasso.get()
                     .load(url).resize(800, 0).centerInside()
                     .into(view as ImageView)
-
-            fadeViewSlow(ctx, true, view) {}
         }
+
     }
 
 }

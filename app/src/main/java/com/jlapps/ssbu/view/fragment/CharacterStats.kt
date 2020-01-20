@@ -6,31 +6,22 @@ import android.os.Bundle
 import android.transition.TransitionManager
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.appbar.AppBarLayout
 import com.jlapps.ssbu.R
 import com.jlapps.ssbu.model.Attributes
 import com.jlapps.ssbu.model.Character
 import com.jlapps.ssbu.model.Move
 import com.jlapps.ssbu.model.formatString
 import com.jlapps.ssbu.util.AnimUtil.animateView
-import com.jlapps.ssbu.util.ViewUtils.fadeViewSlow
 import com.jlapps.ssbu.util.ViewUtils.formatName
-import com.jlapps.ssbu.util.ViewUtils.transitionToSkinView
 import com.jlapps.ssbu.view.adapter.DefaultRecyclerAdapter
 import com.jlapps.ssbu.view.custom.SelectWheel
-import com.jlapps.ssbu.view.custom.SelectWheel.Companion.lastKnownX
-import com.jlapps.ssbu.view.custom.SelectWheel.Companion.lastKnownY
-import com.jlapps.ssbu.view.custom.SelectWheel.Companion.lastSelected
-import com.jlapps.ssbu.view.custom.circularHideView
-import com.jlapps.ssbu.view.custom.circularRevealView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_character_stats.*
 import kotlinx.android.synthetic.main.item_character_stat.view.*
@@ -38,7 +29,6 @@ import kotlinx.android.synthetic.main.item_move.view.*
 import kotlinx.android.synthetic.main.layout_character_moves.*
 import kotlinx.android.synthetic.main.layout_character_stats.*
 import kotlinx.android.synthetic.main.layout_character_traits.*
-import kotlin.math.abs
 
 
 class CharacterStats : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapterListener<Any>{
@@ -53,10 +43,6 @@ class CharacterStats : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapter
         return inflater.inflate(R.layout.fragment_character_stats,container,false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -65,6 +51,7 @@ class CharacterStats : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapter
         (activity as AppCompatActivity).actionBar?.setDisplayShowHomeEnabled(true)
         character = arguments?.get("char") as Character
         ctbl_character_stats.title = character.name
+        setHasOptionsMenu(true)
 
         initCharacterImages()
 
@@ -77,150 +64,55 @@ class CharacterStats : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapter
 
     fun initselectWheel(){
 
-        var view = LayoutInflater.from(context).inflate(R.layout.custom_select_wheel,null)
-        var selectWheelContainer = view.findViewById<View>(R.id.fl_select_wheel)
-        var imgx = iv_character_image.x
-        var imgy = iv_character_image.y
-        var selectWheel = selectWheelContainer.findViewById<SelectWheel>(R.id.select_wheel)
-        iv_character_image.post {
+        SelectWheel.initializeSelectWheel(requireContext(),cl_stat_container,iv_character_image,ctbl_character_stats,character)
 
-            var xOffset = iv_character_image.width * .5
-            var yOffset = iv_character_image.height * .5
-            var width = (iv_character_image.width + xOffset).toInt()
-            var height = (iv_character_image.height + yOffset).toInt()
-            selectWheel.layoutParams = FrameLayout.LayoutParams(width, height)
-            selectWheel.requestLayout()
-
-            selectWheelContainer.x = (iv_character_image.x - (xOffset/2)).toFloat()
-            selectWheelContainer.y = (iv_character_image.y - (yOffset/2)).toFloat()
-            selectWheelContainer.requestLayout()
-        }
-
-
-//        selectWheel.visibility = View.INVISIBLE
-        selectWheel.character = character
-        cl_stat_container.addView(selectWheelContainer)
-//        selectWheel.amount = 8
-
-//        iv_character_image.post {
-//            var xOffset = abs(selectWheelContainer.width - iv_character_image.width)/2
-//            var yOffset = abs(selectWheelContainer.height - iv_character_image.height)/2
-//            selectWheelContainer.x = iv_character_image.x - xOffset
-//            selectWheelContainer.y = iv_character_image.y - yOffset
-//        }
-
-        iv_character_image.setOnTouchListener{_,e ->
-            if (e.action == MotionEvent.ACTION_DOWN) {
-                lastKnownX = e.x
-                lastKnownY = e.y
-                selectWheel.isSelecting = true
-//                fadeViewSlow(requireContext(),false,iv_character_image){}
-            } else if (e.action == MotionEvent.ACTION_UP) {
-                circularHideView(selectWheel)
-                enableScroll()
-                selectWheel.isSelecting = false
-                selectWheel.resetSelection()
-
-                if(lastSelected == -1)
-                    fadeViewSlow(requireContext(),true,iv_character_image){}
-                else
-                    transitionToSkinView(requireContext(),character,iv_character_image, lastSelected,false)
-            }
-            else if(e.action == MotionEvent.ACTION_MOVE) {
-
-                var x = e.x
-                var y = e.y
-                var width = abs(selectWheelContainer.x - selectWheelContainer.width/2)
-                var height = abs(selectWheelContainer.y - selectWheelContainer.height/2)
-
-                var newX = x - width
-                var newY = y - height
-                var area = selectWheel.findAreaTouched(newX,newY)
-                if(area != lastSelected) {
-                    lastSelected = area
-                        transitionToSkinView(requireContext(),character,iv_character_image, lastSelected,true)
-//                    transitionSkinView(requireContext(),character,iv_character_image)
-                }
-
-            }else if(e.action == MotionEvent.ACTION_CANCEL){
-                fadeViewSlow(requireContext(),true,iv_character_image){}
-            }
-
-            false
-        }
-
-        iv_character_image.setOnLongClickListener {
-            Log.e(TAG,"Long click")
-
-            if(selectWheel.visibility == View.INVISIBLE){
-                disableScroll()
-                circularRevealView(selectWheel)
-            }
-            false
-        }
-    }
-    private fun enableScroll() {
-        val params = ctbl_character_stats.getLayoutParams() as AppBarLayout.LayoutParams
-        params.scrollFlags = (
-                AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
-                        or AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED
-                )
-        ctbl_character_stats.setLayoutParams(params)
-        ctbl_character_stats.requestDisallowInterceptTouchEvent(false)
     }
 
-    private fun disableScroll() {
-        val params = ctbl_character_stats.getLayoutParams() as AppBarLayout.LayoutParams
-        params.scrollFlags = 0
-        ctbl_character_stats.setLayoutParams(params)
-        ctbl_character_stats.requestDisallowInterceptTouchEvent(true)
-    }
 
     override fun bindItemToView(item: Any, position: Int, viewHolder: RecyclerView.ViewHolder) {
         if(item is Int){
-            when(Attributes.AttributeType.values()[position]){
-
-                Attributes.AttributeType.DAMAGE -> {
+            when(position){
+                Attributes.DAMAGE -> {
 
                     viewHolder.itemView.iv_character_stat_icon.setImageResource(R.drawable.ic_damage)
                     viewHolder.itemView.tv_character_stat_name.text = "Damage"
                     viewHolder.itemView.pb_character_stat_progress.progress = item
 
                 }
-                Attributes.AttributeType.WEIGHT -> {
+                Attributes.WEIGHT -> {
 
                     viewHolder.itemView.iv_character_stat_icon.setImageResource(R.drawable.ic_weight)
                     viewHolder.itemView.tv_character_stat_name.text = "Weight"
                     viewHolder.itemView.pb_character_stat_progress.progress = item
 
                 }
-                Attributes.AttributeType.DEFENSE -> {
+                Attributes.DEFENSE -> {
 
                     viewHolder.itemView.iv_character_stat_icon.setImageResource(R.drawable.ic_defense)
                     viewHolder.itemView.tv_character_stat_name.text = "Defense"
                     viewHolder.itemView.pb_character_stat_progress.progress = item
 
                 }
-                Attributes.AttributeType.KILL_POWER -> {
+                Attributes.KILL_POWER -> {
 
                     viewHolder.itemView.iv_character_stat_icon.setImageResource(R.drawable.ic_kill_power)
                     viewHolder.itemView.tv_character_stat_name.text = "Kill Power"
                     viewHolder.itemView.pb_character_stat_progress.progress = item
 
                 }
-                Attributes.AttributeType.SPEED -> {
+                Attributes.SPEED -> {
                     viewHolder.itemView.iv_character_stat_icon.setImageResource(R.drawable.ic_speed)
                     viewHolder.itemView.tv_character_stat_name.text = "Speed"
                     viewHolder.itemView.pb_character_stat_progress.progress = item
                 }
-                Attributes.AttributeType.RECOVERY -> {
+                Attributes.RECOVERY -> {
 
                     viewHolder.itemView.iv_character_stat_icon.setImageResource(R.drawable.ic_recover)
                     viewHolder.itemView.tv_character_stat_name.text = "Recovery"
                     viewHolder.itemView.pb_character_stat_progress.progress = item
 
                 }
-                Attributes.AttributeType.NEUTRAL -> {
+                Attributes.NEUTRAL -> {
 
                     viewHolder.itemView.iv_character_stat_icon.setImageResource(R.drawable.ic_neutral)
                     viewHolder.itemView.tv_character_stat_name.text = "Neutral"

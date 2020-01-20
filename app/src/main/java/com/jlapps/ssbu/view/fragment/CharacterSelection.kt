@@ -1,12 +1,12 @@
 package com.jlapps.ssbu.view.fragment
 
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
@@ -28,7 +28,9 @@ import com.jlapps.ssbu.util.FragUtil
 import com.jlapps.ssbu.util.SwipeView.SwipeListener
 import com.jlapps.ssbu.util.SwipeView.SwipeView
 import com.jlapps.ssbu.util.ViewUtils.formatName
+import com.jlapps.ssbu.view.widget.CharacterWidgetProvider
 import com.jlapps.ssbu.viewmodel.SmashViewModel
+import kotlin.random.Random
 
 
 class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAdapterListener<Character>{
@@ -52,6 +54,11 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
 
         initLiveData()
 
+        srl_characters.setOnRefreshListener {
+            randomizeSkins()
+            srl_characters.isRefreshing = false
+        }
+
         recycler = activity!!.findViewById(R.id.rv_characters)
 
         recycler.layoutManager = LinearLayoutManager(context)
@@ -59,6 +66,16 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
                 R.layout.item_character,this)
         recycler.adapter = adapter
 
+    }
+
+    fun randomizeSkins(){
+        for(char in characters){
+            char.skinDex = Random.nextInt(0,8)
+        }
+
+        adapter = DefaultRecyclerAdapter(characters,
+                R.layout.item_character,this)
+        recycler.adapter = adapter
     }
 
     override fun bindItemToView(item: Character, position: Int, viewHolder: RecyclerView.ViewHolder) {
@@ -83,7 +100,7 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
             viewHolder.itemView.iv_character_deselect.visibility = View.INVISIBLE
         }
 
-        if(item.isFavorite)
+        if(item.isFavorite())
             viewHolder.itemView.iv_character_fav_ic.visibility = View.VISIBLE
         else
             viewHolder.itemView.iv_character_fav_ic.visibility = View.INVISIBLE
@@ -96,12 +113,17 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
 
                     fadeView(swipeActionView.context,false,viewHolder.itemView.iv_character_fav_ic)
 
-                    item.isFavorite = false
+                    StorageManger.removeFromFavorites(item)
                 }
                 else {
                     fadeView(swipeActionView.context,true,viewHolder.itemView.iv_character_fav_ic)
-                    item.isFavorite = true
+
+                    StorageManger.addToFavorites(item)
                 }
+
+                var manager = AppWidgetManager.getInstance(context)
+                var ids  =manager.getAppWidgetIds(ComponentName(viewHolder.itemView.context,CharacterWidgetProvider::class.java))
+                manager.notifyAppWidgetViewDataChanged(ids,R.id.avf_widget_characters)
 
                 return true
             }

@@ -24,13 +24,12 @@ object Characters {
             Response.Listener<String> { response ->
                 val gson = Gson()
 
-                Log.e(TAG,"obj ")
-
                 CharacterList.characters = gson.fromJson(response, object : TypeToken<List<Character>>() {}.type)
 
                 updated.value = true
             },
             Response.ErrorListener {
+                it.printStackTrace()
                 updated.value = false
             }
         ){})

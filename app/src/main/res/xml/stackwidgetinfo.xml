@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="40dp"
+    android:minHeight="40dp"
+    android:updatePeriodMillis="50000"
+    android:previewImage="@drawable/mii"
+    android:initialLayout="@layout/widget_layout"
+    android:resizeMode="horizontal|vertical"
+    android:widgetCategory="home_screen">
+</appwidget-provider>

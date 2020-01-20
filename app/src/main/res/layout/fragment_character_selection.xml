@@ -36,15 +36,20 @@
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_characters"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/srl_characters"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_gravity="center_horizontal"
-        android:layoutAnimation="@anim/character_animation"
-        tools:listitem="@layout/item_character"
         app:layout_constraintTop_toBottomOf="@id/abl_char_selection"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_characters"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center_horizontal"
+            android:layoutAnimation="@anim/character_animation"
+            tools:listitem="@layout/item_character"/>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
