@@ -21,12 +21,13 @@ class Character constructor(@SerializedName("_id") var id: String, var name: Str
 
     var skinDex = 0
 
-    var isFavorite = false
     var isSelected = false
 
     fun facesRight():Boolean{
         return (faces == 'r')
     }
+
+    fun isFavorite() = StorageManger.getFavorites().containsKey(this.id)
 }
 
 fun String.formatString():String = this.toLowerCase(Locale.getDefault()).replace("-","_").replace(" ","_").replace(".","").replace("&","and").replace("!!","")

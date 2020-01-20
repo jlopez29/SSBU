@@ -51,9 +51,10 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
 
         initLiveData()
 
-        iv_skin_randomizer.setOnClickListener({
+        srl_characters.setOnRefreshListener {
             randomizeSkins()
-        })
+            srl_characters.isRefreshing = false
+        }
 
         recycler = activity!!.findViewById(R.id.rv_characters)
 
@@ -65,7 +66,6 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
     }
 
     fun randomizeSkins(){
-        Log.e(TAG,"randomize")
         for(char in characters){
             char.skinDex = Random.nextInt(0,8)
         }
@@ -97,7 +97,7 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
             viewHolder.itemView.iv_character_deselect.visibility = View.INVISIBLE
         }
 
-        if(item.isFavorite)
+        if(item.isFavorite())
             viewHolder.itemView.iv_character_fav_ic.visibility = View.VISIBLE
         else
             viewHolder.itemView.iv_character_fav_ic.visibility = View.INVISIBLE
@@ -110,11 +110,11 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
 
                     fadeView(swipeActionView.context,false,viewHolder.itemView.iv_character_fav_ic)
 
-                    item.isFavorite = false
+                    StorageManger.removeFromFavorites(item)
                 }
                 else {
                     fadeView(swipeActionView.context,true,viewHolder.itemView.iv_character_fav_ic)
-                    item.isFavorite = true
+                    StorageManger.addToFavorites(item)
                 }
 
                 return true
