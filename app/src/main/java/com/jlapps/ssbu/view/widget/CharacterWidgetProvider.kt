@@ -8,8 +8,8 @@ import android.util.Log
 import android.widget.RemoteViews
 import com.jlapps.ssbu.R
 
-class ExampleAppWidgetProvider : AppWidgetProvider() {
-    var TAG = "EAWP"
+class CharacterWidgetProvider : AppWidgetProvider() {
+    var TAG = "Widget Provider"
     override fun onUpdate(
             context: Context,
             appWidgetManager: AppWidgetManager,
@@ -27,7 +27,7 @@ class ExampleAppWidgetProvider : AppWidgetProvider() {
             )
 
             var intent = Intent(context, ImageFlipperWidgetService::class.java)
-            views.setRemoteAdapter(appWidgetId,R.id.avf_widget_characters, intent)
+            views.setRemoteAdapter(R.id.avf_widget_characters, intent)
             // Tell the AppWidgetManager to perform an update on the current app widget
             appWidgetManager.updateAppWidget(appWidgetId, views)
 

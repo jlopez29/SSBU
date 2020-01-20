@@ -30,7 +30,7 @@ class ImageFlipperRemoteViewsFactory(
         private val context: Context,
         intent: Intent
 ) : RemoteViewsService.RemoteViewsFactory {
-    val TAG = "IFWS"
+    val TAG = "Image Flipper"
     var usedImages = HashMap<String,Bitmap>()
     var characters = HashMap<String,Character>()
     override fun onCreate() {
@@ -51,6 +51,8 @@ class ImageFlipperRemoteViewsFactory(
 
     override fun onDataSetChanged() {
 //        Log.e(TAG,"onDataSetChanged")
+        StorageManger.init(context)
+        characters = StorageManger.getFavorites()
     }
 
     override fun hasStableIds(): Boolean {
@@ -62,7 +64,6 @@ class ImageFlipperRemoteViewsFactory(
         Log.e(TAG,"getViewAt ${position}")
         StorageManger.init(context)
         characters = StorageManger.getFavorites()
-        this.onDataSetChanged()
 
         var char = characters.values.toList().get(position)
 

@@ -1,5 +1,7 @@
 package com.jlapps.ssbu.view.fragment
 
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -26,6 +28,7 @@ import com.jlapps.ssbu.util.FragUtil
 import com.jlapps.ssbu.util.SwipeView.SwipeListener
 import com.jlapps.ssbu.util.SwipeView.SwipeView
 import com.jlapps.ssbu.util.ViewUtils.formatName
+import com.jlapps.ssbu.view.widget.CharacterWidgetProvider
 import com.jlapps.ssbu.viewmodel.SmashViewModel
 import kotlin.random.Random
 
@@ -114,8 +117,13 @@ class CharacterSelection : Fragment(), DefaultRecyclerAdapter.DefaultRecyclerAda
                 }
                 else {
                     fadeView(swipeActionView.context,true,viewHolder.itemView.iv_character_fav_ic)
+
                     StorageManger.addToFavorites(item)
                 }
+
+                var manager = AppWidgetManager.getInstance(context)
+                var ids  =manager.getAppWidgetIds(ComponentName(viewHolder.itemView.context,CharacterWidgetProvider::class.java))
+                manager.notifyAppWidgetViewDataChanged(ids,R.id.avf_widget_characters)
 
                 return true
             }
