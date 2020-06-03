@@ -23,10 +23,3 @@ Super Smash Bros. Ultimate Android application to view characters/stats/skins an
 * [MongoDB] - Data storage
 * [Firebase] - Image storage
 
-&nbsp;
-
-# iOS Application
-|![iOS](https://i.postimg.cc/X7T2qVCw/ios.png)| 
-|:--:| 
-| https://github.com/dwaynedevelopment/SSBU | 
-
