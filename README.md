@@ -11,6 +11,15 @@ Super Smash Bros. Ultimate Android application to view characters/stats/skins an
 
 &nbsp;
 
+## Custom built quick wheel
+![quickwheel](https://media.giphy.com/media/W0Q8NJ7L39XGNjUfAP/giphy.gif)
+
+&nbsp;
+
+## Favorites widget slideshow
+![widget](https://media.giphy.com/media/TJaAG6ZNa5vPHUUFut/giphy.gif)
+
+&nbsp;
 ## Tech
 ![](https://d2.alternativeto.net/dist/icons/kotlin_156882.png?width=128&height=128&mode=crop&upscale=false)![](https://img.icons8.com/dusk/2x/python.png)![](https://perlmaven.com/img/mongodb-logo.png)![](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9OBTvrc6enAZ_W8xqVPd7FYH1IlW3msH5TQ2ETMAvyn9ww3j5Qw&s)![](https://i.postimg.cc/FztBq3Qn/Aws-Icon.png)
 * [Kotlin] - Android development
